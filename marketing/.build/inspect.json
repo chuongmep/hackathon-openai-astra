@@ -1,0 +1,2518 @@
+[
+  {
+    "slide": 1,
+    "shapes": [
+      {
+        "id": "4",
+        "text": "Simple Dark Mode \nPresentation",
+        "pos": {
+          "left": 43.64650918635171,
+          "top": 200.24314960629923,
+          "width": 753.2690813648294,
+          "height": 261.5737532808399
+        }
+      },
+      {
+        "id": "5",
+        "text": "Lorem ipsum dolor\nLorem ipsum dolor",
+        "pos": {
+          "left": 43.64650918635171,
+          "top": 552.7267191601051,
+          "width": 725.5100262467192,
+          "height": 113.4116535433071
+        }
+      },
+      {
+        "id": "6",
+        "text": "Supertitle",
+        "pos": {
+          "left": 43.64661417322835,
+          "top": 41.18015748031496,
+          "width": 598.6666666666667,
+          "height": 68.15317585301838
+        }
+      }
+    ],
+    "images": [
+      {
+        "id": "7",
+        "frame": {
+          "left": 829.3012073490814,
+          "top": 0,
+          "width": 450.6987926509187,
+          "height": 720
+        }
+      }
+    ]
+  },
+  {
+    "slide": 2,
+    "shapes": [
+      {
+        "id": "4",
+        "text": "Presentation \nheadline goes here",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 389.7843569553806,
+          "width": 992,
+          "height": 261.5737532808399
+        }
+      },
+      {
+        "id": "6",
+        "text": "Supertitle",
+        "pos": {
+          "left": 41.33322834645669,
+          "top": 41.18015748031496,
+          "width": 646.4909186351706,
+          "height": 68.15317585301838
+        }
+      },
+      {
+        "id": "8",
+        "text": "Supertitle",
+        "pos": {
+          "left": 828,
+          "top": 41.18015748031496,
+          "width": 410.6666666666667,
+          "height": 68.15317585301838
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 3,
+    "shapes": [
+      {
+        "id": "5",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 659.3125459317586,
+          "width": 374.6666666666667,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "2",
+        "text": "3",
+        "pos": {
+          "left": 1184.1818372703412,
+          "top": 659.2434645669291,
+          "width": 54.48482939632546,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "3",
+        "text": "Today’s Agenda",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 36.116325459317586,
+          "width": 1197.3333333333335,
+          "height": 109.97280839895014
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 4,
+    "shapes": [
+      {
+        "id": "534",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. Proin mattis nibh risus. Nulla tempor ut massa elementum dapibus. Nam non ante quis enim fringilla tempus nec in lectus. In hac habitasse platea dictumst. \nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. Proin mattis nibh risus. Nulla tempor ut massa elementum dapibus. Nam non ante quis enim fringilla tempus nec in lectus. In hac habitasse platea dictumst. \nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. Proin mattis nibh risus. Nulla tempor ut massa elementum dapibus. Nam non ante quis enim fringilla tempus nec in lectus. In hac habitasse platea dictumst. ",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 193.05490813648294,
+          "width": 580.9123359580053,
+          "height": 436.27842519685043
+        }
+      },
+      {
+        "id": "6",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 659.3125459317586,
+          "width": 374.6666666666667,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "532",
+        "text": "4",
+        "pos": {
+          "left": 1184.1818372703412,
+          "top": 659.2434645669291,
+          "width": 54.48482939632546,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "533",
+        "text": "Two column layout",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 36.116325459317586,
+          "width": 1197.3333333333335,
+          "height": 109.97280839895014
+        }
+      },
+      {
+        "id": "2",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. Proin mattis nibh risus. Nulla tempor ut massa elementum dapibus. Nam non ante quis enim fringilla tempus nec in lectus. In hac habitasse platea dictumst. \nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. Proin mattis nibh risus. Nulla tempor ut massa elementum dapibus. Nam non ante quis enim fringilla tempus nec in lectus. In hac habitasse platea dictumst. \nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. Proin mattis nibh risus. Nulla tempor ut massa elementum dapibus. Nam non ante quis enim fringilla tempus nec in lectus. In hac habitasse platea dictumst. ",
+        "pos": {
+          "left": 657.7544356955381,
+          "top": 230.20409448818899,
+          "width": 581.3333333333334,
+          "height": 399.12923884514436
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 5,
+    "shapes": [
+      {
+        "id": "3",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 659.3125459317586,
+          "width": 374.6666666666667,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "532",
+        "text": "5",
+        "pos": {
+          "left": 1184.1818372703412,
+          "top": 659.2434645669291,
+          "width": 54.48482939632546,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "533",
+        "text": "Two column layout",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 36.116325459317586,
+          "width": 1197.3333333333335,
+          "height": 109.97280839895014
+        }
+      },
+      {
+        "id": "7",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. Proin mattis nibh risus. Nulla tempor ut massa elementum dapibus. Nam non ante quis enim fringilla tempus nec in lectus. In hac habitasse platea dictumst. ",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 213.3332283464567,
+          "width": 581.3333333333334,
+          "height": 371.10624671916014
+        }
+      },
+      {
+        "id": "8",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. Proin mattis nibh risus. Nulla tempor ut massa elementum dapibus. Nam non ante quis enim fringilla tempus nec in lectus. In hac habitasse platea dictumst. ",
+        "pos": {
+          "left": 656.862782152231,
+          "top": 213.3332283464567,
+          "width": 581.3333333333334,
+          "height": 371.10624671916014
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 6,
+    "shapes": [
+      {
+        "id": "4",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 659.3125459317586,
+          "width": 374.6666666666667,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "532",
+        "text": "6",
+        "pos": {
+          "left": 1184.1818372703412,
+          "top": 659.2434645669291,
+          "width": 54.48482939632546,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "533",
+        "text": "Three column layout",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 36.116325459317586,
+          "width": 1197.3333333333335,
+          "height": 109.97280839895014
+        }
+      },
+      {
+        "id": "534",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. ",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 353.33333333333337,
+          "width": 374.6666666666667,
+          "height": 276
+        }
+      },
+      {
+        "id": "2",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. ",
+        "pos": {
+          "left": 864,
+          "top": 353.33333333333337,
+          "width": 374.6666666666667,
+          "height": 276
+        }
+      },
+      {
+        "id": "3",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. \n",
+        "pos": {
+          "left": 452.6666666666667,
+          "top": 353.33333333333337,
+          "width": 374.6666666666667,
+          "height": 276
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 7,
+    "shapes": [
+      {
+        "id": "4",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 659.3125459317586,
+          "width": 374.6666666666667,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "532",
+        "text": "7",
+        "pos": {
+          "left": 1184.1818372703412,
+          "top": 659.2434645669291,
+          "width": 54.48482939632546,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "533",
+        "text": "Three column layout",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 36.116325459317586,
+          "width": 1197.3333333333335,
+          "height": 109.97280839895014
+        }
+      },
+      {
+        "id": "5",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. ",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 421.33333333333337,
+          "width": 374.6666666666667,
+          "height": 208
+        }
+      },
+      {
+        "id": "6",
+        "text": "Nulla tempor ut massa elementum dapibus. Nam non ante quis enim fringilla tempus nec in lectus.",
+        "pos": {
+          "left": 453.33333333333337,
+          "top": 421.33333333333337,
+          "width": 374.6666666666667,
+          "height": 208
+        }
+      },
+      {
+        "id": "7",
+        "text": "Nulla tempor ut massa elementum dapibus. Nam non ante quis enim fringilla tempus nec in lectus.",
+        "pos": {
+          "left": 864.2806299212599,
+          "top": 421.33333333333337,
+          "width": 374.6666666666667,
+          "height": 208
+        }
+      },
+      {
+        "id": "8",
+        "text": "",
+        "pos": {
+          "left": 449.3337532808399,
+          "top": 355.09742782152233,
+          "width": 33.13175853018373,
+          "height": 37.15202099737533
+        }
+      },
+      {
+        "id": "9",
+        "text": "",
+        "pos": {
+          "left": 42.141522309711284,
+          "top": 354.6679265091864,
+          "width": 34.33889763779528,
+          "height": 38.013018372703414
+        }
+      },
+      {
+        "id": "10",
+        "text": "",
+        "pos": {
+          "left": 864.209658792651,
+          "top": 357.6744356955381,
+          "width": 35.54645669291339,
+          "height": 28.442834645669294
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 8,
+    "shapes": [
+      {
+        "id": "5",
+        "text": "",
+        "pos": {
+          "left": 0,
+          "top": 0,
+          "width": 0,
+          "height": 0
+        }
+      },
+      {
+        "id": "532",
+        "text": "8",
+        "pos": {
+          "left": 0,
+          "top": 0,
+          "width": 0,
+          "height": 0
+        }
+      },
+      {
+        "id": "533",
+        "text": "Half text, half image slide",
+        "pos": {
+          "left": 0,
+          "top": 0,
+          "width": 0,
+          "height": 0
+        }
+      },
+      {
+        "id": "8",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. Proin mattis nibh risus. Nulla tempor ut massa elementum dapibus. Nam non ante quis enim fringilla tempus nec in lectus. In hac habitasse platea dictumst. ",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 213.33333333333334,
+          "width": 581.3333333333334,
+          "height": 416
+        }
+      }
+    ],
+    "images": [
+      {
+        "id": "534",
+        "frame": {
+          "left": 658.1669291338583,
+          "top": 41.617742782152234,
+          "width": 581.6,
+          "height": 588.1438320209974
+        }
+      }
+    ]
+  },
+  {
+    "slide": 9,
+    "shapes": [
+      {
+        "id": "2",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 659.3125459317586,
+          "width": 374.6666666666667,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "532",
+        "text": "9",
+        "pos": {
+          "left": 1184.1818372703412,
+          "top": 659.2434645669291,
+          "width": 54.48482939632546,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "533",
+        "text": "Large message slides with three callouts. Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 36.16671916010499,
+          "width": 1197.3333333333335,
+          "height": 134.7015223097113
+        }
+      },
+      {
+        "id": "10",
+        "text": "",
+        "pos": {
+          "left": 452.38351706036747,
+          "top": 353.33343832021,
+          "width": 374.6666666666667,
+          "height": 276
+        }
+      },
+      {
+        "id": "11",
+        "text": "",
+        "pos": {
+          "left": 864,
+          "top": 353.33343832021,
+          "width": 374.6666666666667,
+          "height": 276
+        }
+      },
+      {
+        "id": "12",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus.",
+        "pos": {
+          "left": 485.2305511811024,
+          "top": 435.29238845144357,
+          "width": 309.64188976377955,
+          "height": 150.43328083989502
+        }
+      },
+      {
+        "id": "13",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus.",
+        "pos": {
+          "left": 896.1778477690289,
+          "top": 435.29238845144357,
+          "width": 309.64188976377955,
+          "height": 150.43328083989502
+        }
+      },
+      {
+        "id": "14",
+        "text": "",
+        "pos": {
+          "left": 485.84199475065617,
+          "top": 387.832125984252,
+          "width": 24.546561679790027,
+          "height": 24.53721784776903
+        }
+      },
+      {
+        "id": "15",
+        "text": "",
+        "pos": {
+          "left": 895.8813648293964,
+          "top": 387.83223097112864,
+          "width": 24.546561679790027,
+          "height": 24.53721784776903
+        }
+      },
+      {
+        "id": "6",
+        "text": "",
+        "pos": {
+          "left": 40.76703412073491,
+          "top": 353.33343832021,
+          "width": 374.6666666666667,
+          "height": 276
+        }
+      },
+      {
+        "id": "7",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus.",
+        "pos": {
+          "left": 73.61406824146982,
+          "top": 435.29238845144357,
+          "width": 309.64188976377955,
+          "height": 150.43328083989502
+        }
+      },
+      {
+        "id": "8",
+        "text": "",
+        "pos": {
+          "left": 74.22551181102362,
+          "top": 387.832125984252,
+          "width": 24.546561679790027,
+          "height": 24.53721784776903
+        }
+      },
+      {
+        "id": "9",
+        "text": "Topic\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. Proin mattis nibh risus. Nulla tempor ut massa elementum dapibus. Nam non ante quis enim fringilla tempus nec in lectus. In hac habitasse platea dictumst. \nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. \n",
+        "pos": {
+          "left": 41.33343832020998,
+          "top": 152.28587926509186,
+          "width": 1197.3332283464567,
+          "height": 171.04766404199475
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 10,
+    "shapes": [
+      {
+        "id": "4",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 659.3125459317586,
+          "width": 374.6666666666667,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "532",
+        "text": "10",
+        "pos": {
+          "left": 1184.1818372703412,
+          "top": 659.2434645669291,
+          "width": 54.48482939632546,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "533",
+        "text": "One column layout with checklist ",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 36.116325459317586,
+          "width": 1197.3333333333335,
+          "height": 109.97280839895014
+        }
+      },
+      {
+        "id": "534",
+        "text": "Lorem ipsum dolor sit amet, \nconsectetur adipiscing elit ",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 180.83338582677166,
+          "width": 581.3333333333334,
+          "height": 90.83328083989501
+        }
+      },
+      {
+        "id": "2",
+        "text": "Lorem ipsum dolor",
+        "pos": {
+          "left": 828,
+          "top": 313.94404199475065,
+          "width": 410.6666666666667,
+          "height": 57.61154855643045
+        }
+      },
+      {
+        "id": "3",
+        "text": "",
+        "pos": {
+          "left": 788.2125984251969,
+          "top": 316.5511811023622,
+          "width": 22.315065616797902,
+          "height": 22.306561679790025
+        }
+      },
+      {
+        "id": "12",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. Proin mattis nibh risus. Nulla tempor ut massa elementum dapibus. Nam non ante quis enim fringilla tempus nec in lectus. In hac habitasse platea dictumst. \nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. Proin mattis nibh risus. Nulla tempor ut massa.",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 313.943937007874,
+          "width": 581.3333333333334,
+          "height": 302.8489238845144
+        }
+      },
+      {
+        "id": "16",
+        "text": "Lorem ipsum dolor",
+        "pos": {
+          "left": 828,
+          "top": 377.943937007874,
+          "width": 410.6666666666667,
+          "height": 57.61154855643045
+        }
+      },
+      {
+        "id": "17",
+        "text": "",
+        "pos": {
+          "left": 788.2125984251969,
+          "top": 380.55107611548556,
+          "width": 22.315065616797902,
+          "height": 22.306561679790025
+        }
+      },
+      {
+        "id": "18",
+        "text": "Lorem ipsum dolor",
+        "pos": {
+          "left": 828,
+          "top": 442.49501312335957,
+          "width": 410.6666666666667,
+          "height": 57.61154855643045
+        }
+      },
+      {
+        "id": "19",
+        "text": "",
+        "pos": {
+          "left": 788.2125984251969,
+          "top": 445.10215223097117,
+          "width": 22.315065616797902,
+          "height": 22.306561679790025
+        }
+      },
+      {
+        "id": "20",
+        "text": "Lorem ipsum dolor",
+        "pos": {
+          "left": 828,
+          "top": 506.49490813648293,
+          "width": 410.6666666666667,
+          "height": 57.61154855643045
+        }
+      },
+      {
+        "id": "21",
+        "text": "",
+        "pos": {
+          "left": 788.2125984251969,
+          "top": 509.10204724409454,
+          "width": 22.315065616797902,
+          "height": 22.306561679790025
+        }
+      },
+      {
+        "id": "23",
+        "text": "Lorem ipsum dolor",
+        "pos": {
+          "left": 828,
+          "top": 571.8282414698162,
+          "width": 410.6666666666667,
+          "height": 57.61154855643045
+        }
+      },
+      {
+        "id": "24",
+        "text": "",
+        "pos": {
+          "left": 788.2125984251969,
+          "top": 574.4353805774278,
+          "width": 22.315065616797902,
+          "height": 22.306561679790025
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 11,
+    "shapes": [
+      {
+        "id": "5",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 659.3125459317586,
+          "width": 374.6666666666667,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "532",
+        "text": "11",
+        "pos": {
+          "left": 1184.1818372703412,
+          "top": 659.2434645669291,
+          "width": 54.48482939632546,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "533",
+        "text": "Intro with two comparison cards",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 36.16671916010499,
+          "width": 1197.3333333333335,
+          "height": 67.64272965879266
+        }
+      },
+      {
+        "id": "2",
+        "text": "",
+        "pos": {
+          "left": 41.681154855643044,
+          "top": 350.5567454068242,
+          "width": 580.9855118110237,
+          "height": 138.66677165354332
+        }
+      },
+      {
+        "id": "3",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. ",
+        "pos": {
+          "left": 72.88692913385827,
+          "top": 376.68629921259844,
+          "width": 523.5575853018373,
+          "height": 92.15622047244095
+        }
+      },
+      {
+        "id": "4",
+        "text": "Detail goes here\nDetail goes here\nDetail goes here",
+        "pos": {
+          "left": 72.88692913385827,
+          "top": 506.93774278215227,
+          "width": 549.7797375328084,
+          "height": 102.66666666666667
+        }
+      },
+      {
+        "id": "8",
+        "text": "",
+        "pos": {
+          "left": 657.3002624671916,
+          "top": 350.5567454068242,
+          "width": 580.9855118110237,
+          "height": 138.66677165354332
+        }
+      },
+      {
+        "id": "11",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. ",
+        "pos": {
+          "left": 688.5060367454068,
+          "top": 376.68629921259844,
+          "width": 523.5575853018373,
+          "height": 92.15622047244095
+        }
+      },
+      {
+        "id": "13",
+        "text": "Detail goes here\nDetail goes here\nDetail goes here",
+        "pos": {
+          "left": 688.5060367454068,
+          "top": 506.93774278215227,
+          "width": 549.7797375328084,
+          "height": 102.66666666666667
+        }
+      },
+      {
+        "id": "14",
+        "text": "Topic\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. Proin mattis nibh risus. Nulla tempor ut massa elementum dapibus. Nam non ante quis enim fringilla tempus nec in lectus. In hac habitasse platea dictumst. \nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. \n",
+        "pos": {
+          "left": 42.093333333333334,
+          "top": 121.52367454068242,
+          "width": 1197.3332283464567,
+          "height": 171.04766404199475
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 12,
+    "shapes": [
+      {
+        "id": "11",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 659.3125459317586,
+          "width": 374.6666666666667,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "532",
+        "text": "12",
+        "pos": {
+          "left": 1184.1818372703412,
+          "top": 659.2434645669291,
+          "width": 54.48482939632546,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "533",
+        "text": "Intro and 2x2 card grid",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 36.116325459317586,
+          "width": 1197.3333333333335,
+          "height": 109.97280839895014
+        }
+      },
+      {
+        "id": "7",
+        "text": "",
+        "pos": {
+          "left": 657.6810498687664,
+          "top": 248.80377952755907,
+          "width": 580.9855118110237,
+          "height": 172
+        }
+      },
+      {
+        "id": "8",
+        "text": "Title goes here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus. ",
+        "pos": {
+          "left": 688.8868241469817,
+          "top": 279.7677690288714,
+          "width": 523.5575853018373,
+          "height": 110.07202099737533
+        }
+      },
+      {
+        "id": "9",
+        "text": "",
+        "pos": {
+          "left": 42.9441469816273,
+          "top": 248.80377952755907,
+          "width": 580.9855118110237,
+          "height": 172
+        }
+      },
+      {
+        "id": "10",
+        "text": "Title goes here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus. ",
+        "pos": {
+          "left": 74.14992125984253,
+          "top": 279.7677690288714,
+          "width": 523.5575853018373,
+          "height": 110.07202099737533
+        }
+      },
+      {
+        "id": "2",
+        "text": "",
+        "pos": {
+          "left": 657.6810498687664,
+          "top": 458.8037795275591,
+          "width": 580.9855118110237,
+          "height": 172
+        }
+      },
+      {
+        "id": "3",
+        "text": "Title goes here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus. ",
+        "pos": {
+          "left": 688.8868241469817,
+          "top": 489.7677690288714,
+          "width": 523.5575853018373,
+          "height": 110.07202099737533
+        }
+      },
+      {
+        "id": "4",
+        "text": "",
+        "pos": {
+          "left": 42.9441469816273,
+          "top": 458.8037795275591,
+          "width": 580.9855118110237,
+          "height": 172
+        }
+      },
+      {
+        "id": "5",
+        "text": "Title goes here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus. ",
+        "pos": {
+          "left": 74.14992125984253,
+          "top": 489.7677690288714,
+          "width": 523.5575853018373,
+          "height": 110.07202099737533
+        }
+      },
+      {
+        "id": "6",
+        "text": "Topic\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. Proin mattis nibh risus. Nulla tempor ut massa elementum dapibus. ",
+        "pos": {
+          "left": 42.093333333333334,
+          "top": 111.02372703412074,
+          "width": 1197.3332283464567,
+          "height": 106.2729658792651
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 13,
+    "shapes": [
+      {
+        "id": "6",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 659.3125459317586,
+          "width": 374.6666666666667,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "2",
+        "text": "13",
+        "pos": {
+          "left": 1184.166719160105,
+          "top": 659.166719160105,
+          "width": 54.49994750656168,
+          "height": 25.333333333333336
+        }
+      },
+      {
+        "id": "3",
+        "text": "Four points grid layout ",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 36.116325459317586,
+          "width": 1197.3333333333335,
+          "height": 109.97280839895014
+        }
+      },
+      {
+        "id": "10",
+        "text": "Title goes here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. ",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 213.33333333333334,
+          "width": 581.3333333333334,
+          "height": 172.50005249343832
+        }
+      },
+      {
+        "id": "11",
+        "text": "Title goes here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. ",
+        "pos": {
+          "left": 656.862782152231,
+          "top": 213.33333333333334,
+          "width": 581.3333333333334,
+          "height": 172.50005249343832
+        }
+      },
+      {
+        "id": "4",
+        "text": "Title goes here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. ",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 421.7296587926509,
+          "width": 581.3333333333334,
+          "height": 172.51286089238846
+        }
+      },
+      {
+        "id": "5",
+        "text": "Title goes here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. ",
+        "pos": {
+          "left": 656.862782152231,
+          "top": 421.7296587926509,
+          "width": 581.3333333333334,
+          "height": 172.51286089238846
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 14,
+    "shapes": [
+      {
+        "id": "3",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 659.3125459317586,
+          "width": 374.6666666666667,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "532",
+        "text": "14",
+        "pos": {
+          "left": 1184.1818372703412,
+          "top": 659.2434645669291,
+          "width": 54.48482939632546,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "533",
+        "text": "Intro and data table",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 36.116325459317586,
+          "width": 1197.3333333333335,
+          "height": 109.97280839895014
+        }
+      },
+      {
+        "id": "14",
+        "text": "Topic\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. Proin mattis nibh risus. Nulla tempor ut massa elementum dapibus. ",
+        "pos": {
+          "left": 42.093333333333334,
+          "top": 111.02372703412074,
+          "width": 1197.3332283464567,
+          "height": 106.2729658792651
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 15,
+    "shapes": [
+      {
+        "id": "2",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 659.3125459317586,
+          "width": 374.6666666666667,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "532",
+        "text": "15",
+        "pos": {
+          "left": 1184.1818372703412,
+          "top": 659.2434645669291,
+          "width": 54.48482939632546,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "533",
+        "text": "Intro with four topics",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 36.116325459317586,
+          "width": 1197.3333333333335,
+          "height": 109.97280839895014
+        }
+      },
+      {
+        "id": "12",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus. ",
+        "pos": {
+          "left": 732,
+          "top": 249.33343832020998,
+          "width": 506.6666666666667,
+          "height": 68
+        }
+      },
+      {
+        "id": "15",
+        "text": "Item or topic \ntitle goes here",
+        "pos": {
+          "left": 509.33333333333337,
+          "top": 249.33343832020998,
+          "width": 196,
+          "height": 68
+        }
+      },
+      {
+        "id": "16",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus. ",
+        "pos": {
+          "left": 732,
+          "top": 353.33343832021,
+          "width": 506.6666666666667,
+          "height": 68
+        }
+      },
+      {
+        "id": "17",
+        "text": "Item or topic \ntitle goes here",
+        "pos": {
+          "left": 509.33333333333337,
+          "top": 353.33343832021,
+          "width": 196,
+          "height": 68
+        }
+      },
+      {
+        "id": "18",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus. ",
+        "pos": {
+          "left": 732,
+          "top": 457.33343832021,
+          "width": 506.6666666666667,
+          "height": 68
+        }
+      },
+      {
+        "id": "19",
+        "text": "Item or topic \ntitle goes here",
+        "pos": {
+          "left": 509.33333333333337,
+          "top": 457.33343832021,
+          "width": 196,
+          "height": 68
+        }
+      },
+      {
+        "id": "20",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus. ",
+        "pos": {
+          "left": 732,
+          "top": 562.6667716535434,
+          "width": 506.6666666666667,
+          "height": 68
+        }
+      },
+      {
+        "id": "21",
+        "text": "Item or topic \ntitle goes here",
+        "pos": {
+          "left": 509.33333333333337,
+          "top": 562.6667716535434,
+          "width": 196,
+          "height": 68
+        }
+      },
+      {
+        "id": "3",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. \nQuam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst.",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 249.33343832020998,
+          "width": 374.6666666666667,
+          "height": 379.99989501312336
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 16,
+    "shapes": [
+      {
+        "id": "7",
+        "text": "",
+        "pos": {
+          "left": 0,
+          "top": 0,
+          "width": 0,
+          "height": 0
+        }
+      },
+      {
+        "id": "4",
+        "text": "16",
+        "pos": {
+          "left": 0,
+          "top": 0,
+          "width": 0,
+          "height": 0
+        }
+      },
+      {
+        "id": "11",
+        "text": "Four column layout with eight topics",
+        "pos": {
+          "left": 0,
+          "top": 0,
+          "width": 0,
+          "height": 0
+        }
+      },
+      {
+        "id": "2",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam.",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 436.8573228346457,
+          "width": 272.5390026246719,
+          "height": 148.6241469816273
+        }
+      },
+      {
+        "id": "3",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam.",
+        "pos": {
+          "left": 350.12766404199476,
+          "top": 436.8573228346457,
+          "width": 272.5390026246719,
+          "height": 148.6241469816273
+        }
+      },
+      {
+        "id": "5",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam.",
+        "pos": {
+          "left": 657.6811548556431,
+          "top": 436.8573228346457,
+          "width": 272.5390026246719,
+          "height": 148.6241469816273
+        }
+      },
+      {
+        "id": "6",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam.",
+        "pos": {
+          "left": 966.4754855643044,
+          "top": 436.8573228346457,
+          "width": 272.5390026246719,
+          "height": 148.6241469816273
+        }
+      },
+      {
+        "id": "28",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam.",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 231.82015748031498,
+          "width": 272.5390026246719,
+          "height": 148.6241469816273
+        }
+      },
+      {
+        "id": "29",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam.",
+        "pos": {
+          "left": 350.12766404199476,
+          "top": 231.82015748031498,
+          "width": 272.5390026246719,
+          "height": 148.6241469816273
+        }
+      },
+      {
+        "id": "30",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam.",
+        "pos": {
+          "left": 657.6811548556431,
+          "top": 231.82015748031498,
+          "width": 272.5390026246719,
+          "height": 148.6241469816273
+        }
+      },
+      {
+        "id": "31",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam.",
+        "pos": {
+          "left": 966.4754855643044,
+          "top": 231.82015748031498,
+          "width": 272.5390026246719,
+          "height": 148.6241469816273
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 17,
+    "shapes": [
+      {
+        "id": "7",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 659.3125459317586,
+          "width": 374.6666666666667,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "4",
+        "text": "17",
+        "pos": {
+          "left": 1184.1818372703412,
+          "top": 659.2434645669291,
+          "width": 54.48482939632546,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "11",
+        "text": "Timeline with three text only milestones",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 36.116325459317586,
+          "width": 1197.3333333333335,
+          "height": 109.97280839895014
+        }
+      },
+      {
+        "id": "2",
+        "text": "",
+        "pos": {
+          "left": 35.45595800524934,
+          "top": 354.1997900262467,
+          "width": 1285.6062992125985,
+          "height": 0.031496062992125984
+        }
+      },
+      {
+        "id": "3",
+        "text": "",
+        "pos": {
+          "left": 35.45595800524934,
+          "top": 348.57774278215226,
+          "width": 11.244094488188976,
+          "height": 11.244094488188976
+        }
+      },
+      {
+        "id": "5",
+        "text": "",
+        "pos": {
+          "left": 446.37795275590554,
+          "top": 348.57774278215226,
+          "width": 11.244094488188976,
+          "height": 11.244094488188976
+        }
+      },
+      {
+        "id": "6",
+        "text": "",
+        "pos": {
+          "left": 858.3779527559055,
+          "top": 348.57774278215226,
+          "width": 11.244094488188976,
+          "height": 11.244094488188976
+        }
+      },
+      {
+        "id": "9",
+        "text": "Date",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 298.5056167979003,
+          "width": 169.33333333333334,
+          "height": 27.548556430446194
+        }
+      },
+      {
+        "id": "13",
+        "text": "Date",
+        "pos": {
+          "left": 450.83328083989505,
+          "top": 298.5056167979003,
+          "width": 169.33333333333334,
+          "height": 27.548556430446194
+        }
+      },
+      {
+        "id": "14",
+        "text": "Date",
+        "pos": {
+          "left": 863.3332283464567,
+          "top": 298.5056167979003,
+          "width": 169.33333333333334,
+          "height": 27.548556430446194
+        }
+      },
+      {
+        "id": "8",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam.",
+        "pos": {
+          "left": 453.2407349081365,
+          "top": 401.33333333333337,
+          "width": 331.35170603674544,
+          "height": 166.53606299212598
+        }
+      },
+      {
+        "id": "15",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam.",
+        "pos": {
+          "left": 41.981417322834645,
+          "top": 401.33333333333337,
+          "width": 331.35170603674544,
+          "height": 166.53606299212598
+        }
+      },
+      {
+        "id": "19",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam.",
+        "pos": {
+          "left": 858.5739632545932,
+          "top": 401.33333333333337,
+          "width": 331.35170603674544,
+          "height": 166.53606299212598
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 18,
+    "shapes": [
+      {
+        "id": "7",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 659.3125459317586,
+          "width": 374.6666666666667,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "4",
+        "text": "18",
+        "pos": {
+          "left": 1184.1818372703412,
+          "top": 659.2434645669291,
+          "width": 54.48482939632546,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "11",
+        "text": "Timeline with three card milestones",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 36.116325459317586,
+          "width": 1197.3333333333335,
+          "height": 109.97280839895014
+        }
+      },
+      {
+        "id": "2",
+        "text": "",
+        "pos": {
+          "left": 35.45595800524934,
+          "top": 560.8001049868767,
+          "width": 1285.6062992125985,
+          "height": 0.031496062992125984
+        }
+      },
+      {
+        "id": "3",
+        "text": "",
+        "pos": {
+          "left": 35.45595800524934,
+          "top": 555.1780577427821,
+          "width": 11.244094488188976,
+          "height": 11.244094488188976
+        }
+      },
+      {
+        "id": "5",
+        "text": "",
+        "pos": {
+          "left": 446.37795275590554,
+          "top": 555.1780577427821,
+          "width": 11.244094488188976,
+          "height": 11.244094488188976
+        }
+      },
+      {
+        "id": "6",
+        "text": "",
+        "pos": {
+          "left": 858.3779527559055,
+          "top": 555.1780577427821,
+          "width": 11.244094488188976,
+          "height": 11.244094488188976
+        }
+      },
+      {
+        "id": "20",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 147.16661417322834,
+          "width": 374.6666666666667,
+          "height": 380
+        }
+      },
+      {
+        "id": "21",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. ",
+        "pos": {
+          "left": 73.84577427821523,
+          "top": 189.68997375328084,
+          "width": 309.64188976377955,
+          "height": 269.47674540682414
+        }
+      },
+      {
+        "id": "22",
+        "text": "",
+        "pos": {
+          "left": 452.33333333333337,
+          "top": 147.16661417322834,
+          "width": 374.6666666666667,
+          "height": 380
+        }
+      },
+      {
+        "id": "23",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. ",
+        "pos": {
+          "left": 484.84577427821523,
+          "top": 189.68997375328084,
+          "width": 309.64188976377955,
+          "height": 269.47674540682414
+        }
+      },
+      {
+        "id": "24",
+        "text": "",
+        "pos": {
+          "left": 864.8333858267716,
+          "top": 147.16661417322834,
+          "width": 374.6666666666667,
+          "height": 380
+        }
+      },
+      {
+        "id": "25",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. ",
+        "pos": {
+          "left": 897.3458267716536,
+          "top": 189.68997375328084,
+          "width": 309.64188976377955,
+          "height": 269.47674540682414
+        }
+      },
+      {
+        "id": "8",
+        "text": "Date",
+        "pos": {
+          "left": 446.37795275590554,
+          "top": 588.1791076115486,
+          "width": 272.5390026246719,
+          "height": 41.15412073490814
+        }
+      },
+      {
+        "id": "12",
+        "text": "Date",
+        "pos": {
+          "left": 41.04461942257218,
+          "top": 588.1791076115486,
+          "width": 272.5390026246719,
+          "height": 41.15412073490814
+        }
+      },
+      {
+        "id": "13",
+        "text": "Date",
+        "pos": {
+          "left": 863.5631496062992,
+          "top": 588.1791076115486,
+          "width": 272.5390026246719,
+          "height": 41.15412073490814
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 19,
+    "shapes": [
+      {
+        "id": "6",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 317.33333333333337,
+          "width": 374.6666666666667,
+          "height": 312
+        }
+      },
+      {
+        "id": "7",
+        "text": "",
+        "pos": {
+          "left": 452.6666666666667,
+          "top": 317.33333333333337,
+          "width": 374.6666666666667,
+          "height": 312
+        }
+      },
+      {
+        "id": "8",
+        "text": "",
+        "pos": {
+          "left": 864.2831496062993,
+          "top": 317.33333333333337,
+          "width": 374.6666666666667,
+          "height": 312
+        }
+      },
+      {
+        "id": "2",
+        "text": "19",
+        "pos": {
+          "left": 0,
+          "top": 0,
+          "width": 0,
+          "height": 0
+        }
+      },
+      {
+        "id": "3",
+        "text": "Topic description and three large stat cards layout",
+        "pos": {
+          "left": 0,
+          "top": 0,
+          "width": 0,
+          "height": 0
+        }
+      },
+      {
+        "id": "10",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        "pos": {
+          "left": 73.7441469816273,
+          "top": 514.5000524934384,
+          "width": 309.6666666666667,
+          "height": 86
+        }
+      },
+      {
+        "id": "11",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        "pos": {
+          "left": 896.7830971128609,
+          "top": 514.5000524934384,
+          "width": 309.6666666666667,
+          "height": 86
+        }
+      },
+      {
+        "id": "12",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        "pos": {
+          "left": 485.16650918635173,
+          "top": 514.5000524934384,
+          "width": 309.6666666666667,
+          "height": 86
+        }
+      },
+      {
+        "id": "13",
+        "text": "12%",
+        "pos": {
+          "left": 73.7441469816273,
+          "top": 360,
+          "width": 308.6744356955381,
+          "height": 142.7145406824147
+        }
+      },
+      {
+        "id": "4",
+        "text": "34%",
+        "pos": {
+          "left": 484.2973228346457,
+          "top": 360,
+          "width": 308.6744356955381,
+          "height": 142.7145406824147
+        }
+      },
+      {
+        "id": "5",
+        "text": "56%",
+        "pos": {
+          "left": 898.9356430446195,
+          "top": 360,
+          "width": 308.6744356955381,
+          "height": 142.7145406824147
+        }
+      },
+      {
+        "id": "14",
+        "text": "Topic\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. Proin mattis nibh risus. Nulla tempor ut massa elementum dapibus. Nam non ante quis enim fringilla tempus nec in lectus. In hac habitasse platea dictumst. ",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 119.50656167979002,
+          "width": 1197.3332283464567,
+          "height": 167.91664041994753
+        }
+      },
+      {
+        "id": "9",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 659.3125459317586,
+          "width": 374.6666666666667,
+          "height": 25.327034120734908
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 20,
+    "shapes": [
+      {
+        "id": "5",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 659.3125459317586,
+          "width": 374.6666666666667,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "532",
+        "text": "20",
+        "pos": {
+          "left": 1184.1818372703412,
+          "top": 659.2434645669291,
+          "width": 54.48482939632546,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "533",
+        "text": "Chart with three cards",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 36.116325459317586,
+          "width": 1197.3333333333335,
+          "height": 109.97280839895014
+        }
+      },
+      {
+        "id": "7",
+        "text": "",
+        "pos": {
+          "left": 657.6810498687664,
+          "top": 248.80377952755907,
+          "width": 580.9855118110237,
+          "height": 172
+        }
+      },
+      {
+        "id": "8",
+        "text": "Title goes here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus. ",
+        "pos": {
+          "left": 688.8868241469817,
+          "top": 279.7677690288714,
+          "width": 523.5575853018373,
+          "height": 110.07202099737533
+        }
+      },
+      {
+        "id": "9",
+        "text": "",
+        "pos": {
+          "left": 657.6811548556431,
+          "top": 41.333333333333336,
+          "width": 580.9855118110237,
+          "height": 172
+        }
+      },
+      {
+        "id": "10",
+        "text": "Title goes here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus. ",
+        "pos": {
+          "left": 688.8869291338583,
+          "top": 72.29732283464567,
+          "width": 523.5575853018373,
+          "height": 110.07202099737533
+        }
+      },
+      {
+        "id": "2",
+        "text": "",
+        "pos": {
+          "left": 657.6810498687664,
+          "top": 460.00377952755906,
+          "width": 580.9855118110237,
+          "height": 172
+        }
+      },
+      {
+        "id": "3",
+        "text": "Title goes here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus. ",
+        "pos": {
+          "left": 688.8868241469817,
+          "top": 490.96776902887143,
+          "width": 523.5575853018373,
+          "height": 110.07202099737533
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 21,
+    "shapes": [
+      {
+        "id": "5",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 659.3125459317586,
+          "width": 374.6666666666667,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "4",
+        "text": "21",
+        "pos": {
+          "left": 1184.1818372703412,
+          "top": 659.2434645669291,
+          "width": 54.48482939632546,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "11",
+        "text": "Line chart with two stat callout cards",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 36.116325459317586,
+          "width": 1197.3333333333335,
+          "height": 109.97280839895014
+        }
+      },
+      {
+        "id": "37",
+        "text": "",
+        "pos": {
+          "left": 658.476220472441,
+          "top": 352.76482939632547,
+          "width": 271.0734908136483,
+          "height": 278.90194225721785
+        }
+      },
+      {
+        "id": "38",
+        "text": "12%",
+        "pos": {
+          "left": 683.395065616798,
+          "top": 375.8502887139108,
+          "width": 223.97007874015748,
+          "height": 121.34582677165355
+        }
+      },
+      {
+        "id": "39",
+        "text": "Lorem ipsum dolor \nsit amet, consectetur",
+        "pos": {
+          "left": 690.3890813648294,
+          "top": 532.0981627296588,
+          "width": 216.97616797900264,
+          "height": 64.66666666666667
+        }
+      },
+      {
+        "id": "40",
+        "text": "",
+        "pos": {
+          "left": 968.419002624672,
+          "top": 352.76482939632547,
+          "width": 271.0734908136483,
+          "height": 278.90194225721785
+        }
+      },
+      {
+        "id": "41",
+        "text": "12%",
+        "pos": {
+          "left": 993.3378477690289,
+          "top": 375.8502887139108,
+          "width": 223.97007874015748,
+          "height": 121.34582677165355
+        }
+      },
+      {
+        "id": "42",
+        "text": "Lorem ipsum dolor \nsit amet, consectetur",
+        "pos": {
+          "left": 1000.3318635170604,
+          "top": 532.0981627296588,
+          "width": 216.97616797900264,
+          "height": 64.66666666666667
+        }
+      },
+      {
+        "id": "43",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea. ",
+        "pos": {
+          "left": 657.3333333333334,
+          "top": 205.3075065616798,
+          "width": 581.6139632545932,
+          "height": 104
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 22,
+    "shapes": [
+      {
+        "id": "10",
+        "text": "",
+        "pos": {
+          "left": 66.61123359580053,
+          "top": 633.8333858267716,
+          "width": 374.6666666666667,
+          "height": 25.333333333333336
+        }
+      },
+      {
+        "id": "4",
+        "text": "22",
+        "pos": {
+          "left": 1184.1818372703412,
+          "top": 659.2434645669291,
+          "width": 54.48482939632546,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "11",
+        "text": "Column chart with text and two stat callouts",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 36.116325459317586,
+          "width": 1197.3333333333335,
+          "height": 109.97280839895014
+        }
+      },
+      {
+        "id": "38",
+        "text": "12%",
+        "pos": {
+          "left": 668.3649343832021,
+          "top": 427.5422572178478,
+          "width": 223.97007874015748,
+          "height": 94.88188976377953
+        }
+      },
+      {
+        "id": "39",
+        "text": "Lorem ipsum dolor \nsit amet, consectetur",
+        "pos": {
+          "left": 675.3589501312337,
+          "top": 532.0981627296588,
+          "width": 216.97616797900264,
+          "height": 64.66666666666667
+        }
+      },
+      {
+        "id": "41",
+        "text": "12%",
+        "pos": {
+          "left": 978.3077165354331,
+          "top": 427.5422572178478,
+          "width": 223.97007874015748,
+          "height": 94.88188976377953
+        }
+      },
+      {
+        "id": "42",
+        "text": "Lorem ipsum dolor \nsit amet, consectetur",
+        "pos": {
+          "left": 985.3017322834646,
+          "top": 532.0981627296588,
+          "width": 216.97616797900264,
+          "height": 64.66666666666667
+        }
+      },
+      {
+        "id": "2",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 109.33333333333334,
+          "width": 580.1905511811024,
+          "height": 570.6112335958005
+        }
+      },
+      {
+        "id": "6",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus. Nullam pharetra mauris tortor. In hac habitasse platea dictumst. Proin mattis nibh risus.",
+        "pos": {
+          "left": 675.3589501312337,
+          "top": 179.446719160105,
+          "width": 559.7522309711286,
+          "height": 169.45574803149606
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 23,
+    "shapes": [
+      {
+        "id": "3",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 659.3125459317586,
+          "width": 374.6666666666667,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "4",
+        "text": "23",
+        "pos": {
+          "left": 1184.1818372703412,
+          "top": 659.2434645669291,
+          "width": 54.48482939632546,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "8",
+        "text": "Three column pricing layout",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 36.116325459317586,
+          "width": 1197.3333333333335,
+          "height": 109.97280839895014
+        }
+      },
+      {
+        "id": "5",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 213.33333333333334,
+          "width": 374.6666666666667,
+          "height": 416
+        }
+      },
+      {
+        "id": "15",
+        "text": "Starting from",
+        "pos": {
+          "left": 67.58330708661417,
+          "top": 502.2856692913386,
+          "width": 322.166719160105,
+          "height": 22.291863517060367
+        }
+      },
+      {
+        "id": "16",
+        "text": "$234",
+        "pos": {
+          "left": 67.58330708661417,
+          "top": 554.5566404199475,
+          "width": 179.0833595800525,
+          "height": 50.586141732283465
+        }
+      },
+      {
+        "id": "17",
+        "text": "/ per month",
+        "pos": {
+          "left": 246.66666666666669,
+          "top": 569.5298687664042,
+          "width": 143.0833595800525,
+          "height": 22.291863517060367
+        }
+      },
+      {
+        "id": "19",
+        "text": "",
+        "pos": {
+          "left": 69.29763779527559,
+          "top": 532.4212073490813,
+          "width": 322.28577427821523,
+          "height": 0
+        }
+      },
+      {
+        "id": "2",
+        "text": "",
+        "pos": {
+          "left": 452,
+          "top": 213.33333333333334,
+          "width": 374.6666666666667,
+          "height": 416
+        }
+      },
+      {
+        "id": "6",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus.",
+        "pos": {
+          "left": 478.24997375328087,
+          "top": 243.15464566929134,
+          "width": 322.166719160105,
+          "height": 214.178687664042
+        }
+      },
+      {
+        "id": "7",
+        "text": "Starting from",
+        "pos": {
+          "left": 478.24997375328087,
+          "top": 502.2856692913386,
+          "width": 322.166719160105,
+          "height": 22.291863517060367
+        }
+      },
+      {
+        "id": "10",
+        "text": "$234",
+        "pos": {
+          "left": 478.24997375328087,
+          "top": 554.5566404199475,
+          "width": 179.0833595800525,
+          "height": 50.586141732283465
+        }
+      },
+      {
+        "id": "11",
+        "text": "/ per month",
+        "pos": {
+          "left": 657.3333333333334,
+          "top": 569.5298687664042,
+          "width": 143.0833595800525,
+          "height": 22.291863517060367
+        }
+      },
+      {
+        "id": "12",
+        "text": "",
+        "pos": {
+          "left": 479.9643044619423,
+          "top": 532.4212073490813,
+          "width": 322.28577427821523,
+          "height": 0
+        }
+      },
+      {
+        "id": "13",
+        "text": "",
+        "pos": {
+          "left": 862.6666666666667,
+          "top": 213.33333333333334,
+          "width": 374.6666666666667,
+          "height": 416
+        }
+      },
+      {
+        "id": "14",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus.",
+        "pos": {
+          "left": 888.9166404199475,
+          "top": 243.15464566929134,
+          "width": 322.166719160105,
+          "height": 214.178687664042
+        }
+      },
+      {
+        "id": "18",
+        "text": "Starting from",
+        "pos": {
+          "left": 888.9166404199475,
+          "top": 502.2856692913386,
+          "width": 322.166719160105,
+          "height": 22.291863517060367
+        }
+      },
+      {
+        "id": "20",
+        "text": "$234",
+        "pos": {
+          "left": 888.9166404199475,
+          "top": 554.5566404199475,
+          "width": 179.0833595800525,
+          "height": 50.586141732283465
+        }
+      },
+      {
+        "id": "21",
+        "text": "/ per month",
+        "pos": {
+          "left": 1068,
+          "top": 569.5298687664042,
+          "width": 143.0833595800525,
+          "height": 22.291863517060367
+        }
+      },
+      {
+        "id": "22",
+        "text": "",
+        "pos": {
+          "left": 890.630971128609,
+          "top": 532.4212073490813,
+          "width": 322.28577427821523,
+          "height": 0
+        }
+      },
+      {
+        "id": "9",
+        "text": "Title here\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultricies quam ut massa luctus cursus.",
+        "pos": {
+          "left": 67.41669291338583,
+          "top": 243.166719160105,
+          "width": 322.33333333333337,
+          "height": 214.16661417322837
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 24,
+    "shapes": [
+      {
+        "id": "11",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 659.3125459317586,
+          "width": 374.6666666666667,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "532",
+        "text": "24",
+        "pos": {
+          "left": 1184.1818372703412,
+          "top": 659.2434645669291,
+          "width": 54.48482939632546,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "533",
+        "text": "Gantt chart over time",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 36.116325459317586,
+          "width": 1197.3333333333335,
+          "height": 109.97280839895014
+        }
+      },
+      {
+        "id": "5",
+        "text": "Lorem ipsum",
+        "pos": {
+          "left": 495.71842519685043,
+          "top": 431.2587926509187,
+          "width": 479.0199475065617,
+          "height": 53.88976377952756
+        }
+      },
+      {
+        "id": "6",
+        "text": "Lorem ipsum",
+        "pos": {
+          "left": 61.32209973753281,
+          "top": 575.1590551181102,
+          "width": 1157.6596325459318,
+          "height": 53.88976377952756
+        }
+      },
+      {
+        "id": "7",
+        "text": "Lorem ipsum",
+        "pos": {
+          "left": 789.7946456692914,
+          "top": 499.20892388451443,
+          "width": 429.1871916010499,
+          "height": 53.88976377952756
+        }
+      },
+      {
+        "id": "8",
+        "text": "Lorem ipsum",
+        "pos": {
+          "left": 296.0596325459318,
+          "top": 357.2850393700788,
+          "width": 922.9220997375328,
+          "height": 53.88976377952756
+        }
+      },
+      {
+        "id": "9",
+        "text": "Lorem ipsum",
+        "pos": {
+          "left": 296.0596325459318,
+          "top": 283.30866141732287,
+          "width": 672.8123884514436,
+          "height": 53.88976377952756
+        }
+      },
+      {
+        "id": "10",
+        "text": "Lorem ipsum",
+        "pos": {
+          "left": 53.32209973753281,
+          "top": 207.35853018372705,
+          "width": 439.38897637795276,
+          "height": 53.88976377952756
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 25,
+    "shapes": [
+      {
+        "id": "23",
+        "text": "",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 659.3125459317586,
+          "width": 374.6666666666667,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "532",
+        "text": "25",
+        "pos": {
+          "left": 1184.1818372703412,
+          "top": 659.2434645669291,
+          "width": 54.48482939632546,
+          "height": 25.327034120734908
+        }
+      },
+      {
+        "id": "533",
+        "text": "Calendar grid with milestones",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 36.116325459317586,
+          "width": 1197.3333333333335,
+          "height": 109.97280839895014
+        }
+      },
+      {
+        "id": "2",
+        "text": "Milestone",
+        "pos": {
+          "left": 56.26729658792651,
+          "top": 171.4849343832021,
+          "width": 210.39937007874016,
+          "height": 35.68913385826772
+        }
+      },
+      {
+        "id": "5",
+        "text": "Milestone",
+        "pos": {
+          "left": 56.26729658792651,
+          "top": 214.1516010498688,
+          "width": 210.39937007874016,
+          "height": 35.68913385826772
+        }
+      },
+      {
+        "id": "6",
+        "text": "Milestone",
+        "pos": {
+          "left": 534.9339632545932,
+          "top": 187.76587926509188,
+          "width": 210.39937007874016,
+          "height": 35.68913385826772
+        }
+      },
+      {
+        "id": "9",
+        "text": "Milestone",
+        "pos": {
+          "left": 56.26729658792651,
+          "top": 446.98141732283466,
+          "width": 210.39937007874016,
+          "height": 35.68913385826772
+        }
+      },
+      {
+        "id": "10",
+        "text": "Milestone",
+        "pos": {
+          "left": 773.6006299212598,
+          "top": 446.98141732283466,
+          "width": 210.39937007874016,
+          "height": 35.68913385826772
+        }
+      },
+      {
+        "id": "14",
+        "text": "Milestone",
+        "pos": {
+          "left": 296.2672965879265,
+          "top": 573.0992125984252,
+          "width": 210.39937007874016,
+          "height": 35.68913385826772
+        }
+      }
+    ],
+    "images": []
+  },
+  {
+    "slide": 26,
+    "shapes": [
+      {
+        "id": "4",
+        "text": "Thank you",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 182.54645669291338,
+          "width": 992,
+          "height": 261.5737532808399
+        }
+      },
+      {
+        "id": "5",
+        "text": "Lorem ipsum details\nLorem ipsum details\nLorem ipsum details",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 522.1333333333333,
+          "width": 374.6666666666667,
+          "height": 113.4116535433071
+        }
+      },
+      {
+        "id": "6",
+        "text": "Supertitle",
+        "pos": {
+          "left": 41.333333333333336,
+          "top": 41.18015748031496,
+          "width": 169.33333333333334,
+          "height": 68.15317585301838
+        }
+      }
+    ],
+    "images": []
+  }
+]

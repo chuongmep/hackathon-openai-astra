@@ -1,0 +1,23 @@
+import fs from 'node:fs/promises';
+import {PresentationFile,FileBlob} from '@oai/artifact-tool';
+import {finalizePresentation} from '/Users/me/.codex/plugins/cache/openai-primary-runtime/presentations/26.909.12148/skills/presentations/container_tools/artifact_tool_utils.mjs';
+const root='/Users/me/Downloads/repos/hackathon-openai-astra/marketing';
+const p=await PresentationFile.importPptx(await FileBlob.load(root+'/output/Astra-IFC-Complience-Team.pptx'));
+const {slide:s}=p.slides.insert({after:p.slides.items[6]});s.background.fill='#000000';
+function text(str,x,y,w,h,size=26,color='#FFFFFF'){let a=s.shapes.add({geometry:'textbox',position:{left:x,top:y,width:w,height:h},fill:'none',line:{fill:'none',width:0}});a.text=str;a.text.style={typeface:'Arial',fontSize:size,color,autoFit:'none'};}
+text('Manual review vs. Astra-IFC-Complience',41,36,1198,80,46);
+text('Construction model review before cost estimation',41,122,1150,45,26);
+const vals=[['Review activity','Manual workflow','With the app'],['Find and inspect objects','Cross-check model and schedules','Linked 3D view, tree, and properties'],['Record review findings','Capture screenshots and notes','Save issues with their viewpoints'],['Prepare element data','Compile an element list by hand','Filter model data and export Excel'],['Illustrative effort per review','8 hours / US$400 labor','4 hours / US$200 labor']];
+const t=s.tables.add({rows:5,columns:3,left:41,top:190,width:1198,height:300,columnWidths:[290,440,468],values:vals});
+t.borders.assign({fill:'#454545',width:1,style:'solid'});
+for(let r=0;r<5;r++)for(let c=0;c<3;c++){const cell=t.getCell(r,c);cell.fill=r===0?'#242424':'#000000';cell.text.style={typeface:'Arial',fontSize:23,color:'#FFFFFF',bold:r===0};}
+text('4 hours saved',41,512,365,54,38);text('50% less review time',448,512,430,54,38);text('US$200 saved',895,512,345,54,38);
+text('Benefits: easier data verification, traceable reviews, and a clearer handoff to estimators.',41,574,1180,50,25);
+text('Illustrative scenario, not measured: 8h vs. 4h at US$50/h. Gross labor savings exclude app and AI costs.',41,642,1145,48,19);
+text('8',1184,660,55,26,16);
+s.speakerNotes.textFrame.setText('Allow 35 seconds. Compare the same construction model review scope with and without the app. Manual workflow is an illustrative baseline, not a measured industry benchmark. The app supports linked object inspection, local issues with saved viewpoints, and filtered XLSX export. Example assumptions: manual review 8 hours, app-assisted review 4 hours including human verification, and US$50 per staff-hour. Calculation: (8 - 4) = 4 hours saved; 4 / 8 = 50% reduction; 8 × 50 = US$400 manual labor; 4 × 50 = US$200 app-assisted labor; gross labor savings US$200 per review. These are scenario values, not actual measured product performance or guaranteed savings. Net savings would subtract software, AI, setup and training costs. This is review labor cost, not a reduction in construction materials or total project cost. Potential benefits include less copying, easier verification and traceable review context. No quantified rework, error-rate or construction-cost reduction is established. Automated standards mapping and live AI integration remain planned as described earlier. Sources: user request; frontend/src/App.tsx; frontend/src/lib/model.ts; frontend/src/lib/review.ts. Validate with timed manual and app-assisted reviews of the same model and scope.');
+await (await PresentationFile.exportPptx(p)).save(root+'/.build/comparison-candidate.pptx');
+const skill='/Users/me/.codex/plugins/cache/openai-primary-runtime/presentations/26.909.12148/skills/presentations';
+await finalizePresentation({workspaceDir:root,candidatePath:root+'/.build/comparison-candidate.pptx',finalPath:root+'/output/Astra-IFC-Complience-Comparison.pptx',pythonExecutable:'/Users/me/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3',integrityValidatorPath:skill+'/container_tools/inspect_presentation_package_integrity.py',layoutValidatorPath:skill+'/container_tools/inspect_presentation_layout_geometry.py',layoutArgs:['--expected-slide-size-emu','12192000,6858000','--validate-heading-fit','--require-native-table-slide','8'],verifyArtifactToolImport:true,receiptPath:root+'/.build/comparison-validation.json'});
+const final=await PresentationFile.importPptx(await FileBlob.load(root+'/output/Astra-IFC-Complience-Comparison.pptx'));
+for(let i=0;i<final.slides.items.length;i++)await fs.writeFile(root+`/.build/comparison-${i+1}.png`,new Uint8Array(await (await final.slides.items[i].export({format:'png',scale:1})).arrayBuffer()));

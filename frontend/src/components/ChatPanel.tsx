@@ -1,13 +1,28 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowUp, AudioLines, Mic, Square, Sparkles } from "lucide-react";
+import {
+  ArrowUp,
+  AudioLines,
+  Square,
+  Sparkles,
+  PanelRightClose,
+} from "lucide-react";
 import { streamChat, type Context } from "../lib/api";
+import type { ReviewController } from "../lib/review";
 import { VoiceClient } from "../lib/voice";
 
 export function ChatPanel({
   context,
   onEvent,
+  controller: review,
+  bridgeStatus,
+  visible,
+  onHide,
 }: {
   context: Context | null;
+  controller: ReviewController;
+  bridgeStatus: string;
+  visible: boolean;
+  onHide(): void;
   onEvent: (name: string, data: unknown) => void;
 }) {
   const [messages, setMessages] = useState<Context["history"]>([]);
@@ -19,6 +34,24 @@ export function ChatPanel({
   const [error, setError] = useState("");
   const [progress, setProgress] = useState("");
   const [transcripts, setTranscripts] = useState<Context["history"]>([]);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    const field = textareaRef.current;
+    if (field && visible) {
+      field.style.height = "auto";
+      field.style.height = `${Math.min(140, Math.max(56, field.scrollHeight))}px`;
+    }
+  }, [draft, visible]);
+  useEffect(() => {
+    if (!visible) {
+      const client = voice.current;
+      voice.current = undefined;
+      setLive(false);
+      setConnecting(false);
+      setProgress("");
+      void client?.stop();
+    }
+  }, [visible]);
   const abort = useRef<AbortController>();
   const voice = useRef<VoiceClient>();
   const mounted = useRef(true);
@@ -88,6 +121,11 @@ export function ChatPanel({
     const controller = new AbortController();
     abort.current = controller;
     try {
+      const local = await review.command(text);
+      if (local) {
+        setMessages((old) => [...old, { role: "assistant", content: local }]);
+        return;
+      }
       await streamChat(
         { ...context, history, message: text },
         controller.signal,
@@ -166,7 +204,19 @@ export function ChatPanel({
         <span>
           <Sparkles size={16} /> Model assistant
         </span>
-        <span className="badge">ASTRA</span>
+        <div className="chat-heading-actions">
+          <span className="badge" title={bridgeStatus}>
+            ASTRA
+          </span>
+          <button
+            type="button"
+            aria-label="Close chat panel"
+            title="Hide chat panel"
+            onClick={onHide}
+          >
+            <PanelRightClose size={17} />
+          </button>
+        </div>
       </div>
       <div className="chat-context">
         <span className="dot" />{" "}
@@ -232,6 +282,13 @@ export function ChatPanel({
         <div ref={end} />
       </div>
       <div className="chat-bottom">
+        {live && (
+          <div className="voice-session" role="status">
+            <div className="voice-orb" />
+            <strong>Voice conversation active</strong>
+            <span>Speak a model command or question</span>
+          </div>
+        )}
         {context?.selected_guids.length ? (
           <div className="selection-context">
             Context · {context.selected_guids[0]}
@@ -249,6 +306,8 @@ export function ChatPanel({
           }}
         >
           <textarea
+            ref={textareaRef}
+            rows={2}
             aria-label="Message model assistant"
             placeholder="Ask about your model…"
             value={draft}
@@ -262,31 +321,46 @@ export function ChatPanel({
           />
           <div className="composer-actions">
             <span>Verified IFC data</span>
-            <button
-              className="send"
-              aria-label="Send message"
-              disabled={!context || busy || live || connecting || !draft.trim()}
-            >
-              <ArrowUp size={18} />
-            </button>
+            <div className="composer-buttons">
+              <button
+                type="button"
+                className={`voice-icon ${live ? "active" : ""}`}
+                aria-label={
+                  connecting
+                    ? "Cancel voice connection"
+                    : live
+                      ? "End voice conversation"
+                      : "Start voice conversation"
+                }
+                title={
+                  connecting
+                    ? "Cancel voice connection"
+                    : live
+                      ? "End voice conversation"
+                      : "Start voice conversation"
+                }
+                aria-pressed={live}
+                onClick={() => void toggleVoice()}
+                disabled={!context || busy}
+              >
+                {live || connecting ? (
+                  <Square size={17} />
+                ) : (
+                  <AudioLines size={20} />
+                )}
+              </button>
+              <button
+                className="send"
+                aria-label="Send message"
+                disabled={
+                  !context || busy || live || connecting || !draft.trim()
+                }
+              >
+                <ArrowUp size={18} />
+              </button>
+            </div>
           </div>
         </form>
-        <button
-          className={`voice ${live ? "active" : ""}`}
-          onClick={() => void toggleVoice()}
-          disabled={!context || busy}
-        >
-          {live ? <Square size={16} /> : <Mic size={16} />}{" "}
-          {connecting
-            ? "Cancel voice connection"
-            : live
-              ? "End voice conversation"
-              : "Start voice conversation"}
-          <AudioLines size={19} />
-        </button>
-        <p className="fine-print">
-          Astra tools · GPT-Live audio · read-only model
-        </p>
       </div>
     </aside>
   );

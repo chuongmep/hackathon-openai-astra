@@ -108,3 +108,17 @@ The live workflow tests use generated IFC/workbook fixtures, not uploaded projec
 See [frontend integration contract](docs/frontend-integration.md) and [verification record](docs/verification.md).
 
 Official protocol references: [Astra](https://developers.openai.com/api/docs/models/gpt-6-astra), [Live delegation](https://developers.openai.com/api/docs/guides/live-delegation), [WebRTC](https://developers.openai.com/api/docs/guides/voice-webrtc?api=live), [server controls](https://developers.openai.com/api/docs/guides/voice-server-controls), [IfcOpenShell](https://docs.ifcopenshell.org/ifcopenshell-python/code_examples.html).
+
+## Integrated frontend navigation and review
+
+The frontend includes the latest orbit/pan/walk controls, view cube, section cuts,
+coloring and approximate measurements, movable properties, and locally saved
+review issues. Chat can be resized or collapsed; collapsing it ends voice capture.
+Backend AI actions and manual review controls share selection and visibility state.
+Text questions use Astra and voice uses GPT-Live; the legacy mock adapter is unused
+by the running app. See [the frontend guide](frontend/README.md) for controls and limits.
+
+![Frontend workspace](assets/frontend-demo.png)
+
+The remote presentation is available at
+[Astra IFC comparison](assets/Astra-IFC-Complience-Comparison.pptx).

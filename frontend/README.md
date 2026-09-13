@@ -51,3 +51,28 @@ bun run format:check
 ```
 
 The original `src/mock-api` remains as an unused fixture for its existing tests; the running app does not import it. See [API contract](../docs/frontend-integration.md) and [verification record](../docs/verification.md). Human microphone/speaker and interruption behavior still require manual validation on the target browser.
+
+## AI-aided design review (IFC Lite adaptation)
+
+Inspired by the workflow in [Autodesk's AI-aided design demo](https://github.com/autodesk-platform-services/ai-aided-design-demo), implemented against the existing local IFC Lite renderer. The local review controls require no Autodesk account or API key; Astra chat and GPT-Live still use the backend.
+
+- The scene toolbar groups orbit/pan, zoom, isolate/hide, section, bounding-box measurement, IFC-class coloring, review issues, and reset. Colors have a scrollable legend. Reset clears visibility, section, colors, and measurement.
+- Review issues capture selection, camera pose/up direction, isolation, hidden IDs, section, and colors when the draft is created. Editing the draft retains that viewpoint. Saving is separate from drafting. Open a saved issue to restore its view.
+- Issues are stored in this browser's localStorage, keyed by SHA-256 of IFC file contents. Reopening the same file restores its issues. Different files with the same name cannot share issues. Storage is local, not a team issue tracker; assignees do not receive notifications.
+- Ten typed WebMCP tools register on `document.modelContext` (with a legacy `navigator.modelContext` fallback): `get-view-state`, `browse-hierarchy`, `get-properties`, `measure-elements`, `set-view-state`, `set-theming-color`, `list-issues`, `show-issue`, `draft-issue`, `submit-issue`. Queries are scoped to the loaded model; hierarchy/property/issue lists paginate. `AI tools ready` means registration succeeded, not that an AI service is embedded. Browsers without WebMCP retain manual and local-command features.
+- The built-in chat recognizes explicit local commands: `Isolate selected element`, `Hide selected element`, `Show all elements`, `Measure selected element`, `Color by type`, `Draft an issue`, `Show ISS-1`, `Reset view`. Other questions use real Astra through the backend. External WebMCP-capable agents can also use the registered browser tools.
+- Voice uses GPT-Live WebRTC with backend Astra delegation. The new animated orb and compact voice button retain cancellation and startup progress. Hiding chat stops voice.
+- Measurement uses axis-aligned geometry bounds in metres (Y is height). These are approximate extents, not exact surface dimensions or regulatory checks. Walkthrough uses WASD/arrows on the focused canvas, Q/E for elevation, and drag-to-look. Movement is 3 metres per second; it is free navigation without collision detection or gravity. Exact point-to-point measurement is not included.
+
+Integration boundaries: `src/lib/review.ts` owns shared scene/review actions; `src/lib/webmcp.ts` exposes them to browser agents; `src/components/ReviewPanel.tsx` is the human review form. The existing `src/mock-api/` is retained only for legacy tests. Tool outputs and IFC property text are data, not agent instructions.
+
+Properties can be moved by dragging their heading and resized with the bottom-right handle. Focus either handle and use arrow keys for keyboard adjustment. The panel stays within the scene when the surrounding splits change.
+
+
+### Navigation controls and verification
+
+Left-drag orbits; middle/right-drag and Shift-drag pan, including during walkthrough. Wheel zoom works in every navigation mode (pixel, line, and page wheel deltas are normalized). Pointer capture keeps dragging active outside the canvas and cancellation stops it. Walkthrough focuses the canvas; WASD/arrows move, Q/E change elevation, and Escape exits. Typing in chat does not move the camera. Home, view-cube faces, Reset, and restored issues exit walkthrough.
+
+Navigation regression tests exercise the actual IFC Lite Camera with pointer, wheel and keyboard events, including pan/zoom after the renderer was restricted to orbit-only mode. The renderer must remain in `all` interaction mode: app-level event routing chooses the operation. Setting the renderer to `orbit` blocks its pan and zoom APIs.
+
+Latest validation: 16 automated tests and production build passed; sample IFC load, wheel zoom, pan, walkthrough movement/exit, properties, isolation/section, coloring/measurement, issue restoration, local chat, and chat/sheet toggles checked in browser. XLSX serialization is covered by a workbook round-trip test. Physical middle-button hardware and microphone conversation were not exercised by browser automation; middle-button event routing is covered by the real-camera regression test. Walkthrough remains free navigation without collision/gravity.

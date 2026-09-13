@@ -2,12 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+import { walkStep, lookTarget } from "./walkthrough";
 import { Renderer } from "@ifc-lite/renderer";
-export type ViewState = { selected: Set<number>; isolated: Set<number> | null };
 type ViewerSession = { renderer: Renderer; destroy: () => void };
-function setupCameraControls(
+export function setupCameraControls(
   canvas: HTMLCanvasElement,
   renderer: Renderer,
+  mode: () => string,
 ): () => void {
   const camera = renderer.getCamera();
   let isDragging = false;
@@ -15,15 +16,25 @@ function setupCameraControls(
   let lastX = 0;
   let lastY = 0;
 
-  const onMouseDown = (event: MouseEvent) => {
+  const onMouseDown = (event: PointerEvent) => {
+    if (event.button > 2) return;
+    event.preventDefault();
+    canvas.setPointerCapture(event.pointerId);
+    camera.reset();
+    camera.setInteractionMode("all");
+    canvas.focus();
     isDragging = true;
-    isPanning = event.button === 1 || event.button === 2 || event.shiftKey;
+    isPanning =
+      mode() === "pan" ||
+      event.button === 1 ||
+      event.button === 2 ||
+      event.shiftKey;
     lastX = event.clientX;
     lastY = event.clientY;
     canvas.style.cursor = isPanning ? "move" : "grabbing";
   };
 
-  const onMouseMove = (event: MouseEvent) => {
+  const onMouseMove = (event: PointerEvent) => {
     if (!isDragging) return;
     const deltaX = event.clientX - lastX;
     const deltaY = event.clientY - lastY;
@@ -32,9 +43,18 @@ function setupCameraControls(
 
     if (isPanning) {
       camera.pan(deltaX, deltaY);
+    } else if (mode() === "walk") {
+      const t = lookTarget(
+        camera.getPosition(),
+        camera.getTarget(),
+        deltaX,
+        deltaY,
+      );
+      camera.setTarget(t.x, t.y, t.z);
     } else {
       camera.orbit(deltaX, deltaY);
     }
+    renderer.requestRender();
   };
 
   const stopDrag = () => {
@@ -45,26 +65,117 @@ function setupCameraControls(
 
   const onWheel = (event: WheelEvent) => {
     event.preventDefault();
-    camera.zoom(event.deltaY);
+    camera.reset();
+    camera.setInteractionMode("all");
+    const delta =
+      event.deltaY *
+      (event.deltaMode === 1
+        ? 16
+        : event.deltaMode === 2
+          ? canvas.clientHeight
+          : 1);
+    camera.zoom(delta);
+    renderer.requestRender();
   };
 
   const onContextMenu = (event: MouseEvent) => {
     event.preventDefault();
   };
 
-  canvas.addEventListener("mousedown", onMouseDown);
-  window.addEventListener("mousemove", onMouseMove);
-  window.addEventListener("mouseup", stopDrag);
-  canvas.addEventListener("mouseleave", stopDrag);
+  const keys = new Set<string>();
+  const clearKeys = () => {
+    keys.clear();
+    stopDrag();
+  };
+  const keydown = (e: KeyboardEvent) => {
+    if (mode() !== "walk" || document.activeElement !== canvas) return;
+    const key = e.key.toLowerCase();
+    if (
+      [
+        "w",
+        "a",
+        "s",
+        "d",
+        "q",
+        "e",
+        "arrowup",
+        "arrowdown",
+        "arrowleft",
+        "arrowright",
+      ].includes(key)
+    ) {
+      e.preventDefault();
+      if (!keys.has(key) && !e.repeat) {
+        const pose = walkStep(
+          camera.getPosition(),
+          camera.getTarget(),
+          ["w", "arrowup"].includes(key)
+            ? 1
+            : ["s", "arrowdown"].includes(key)
+              ? -1
+              : 0,
+          ["d", "arrowright"].includes(key)
+            ? 1
+            : ["a", "arrowleft"].includes(key)
+              ? -1
+              : 0,
+          key === "e" ? 1 : key === "q" ? -1 : 0,
+          1 / 60,
+        );
+        camera.setPosition(pose.eye.x, pose.eye.y, pose.eye.z);
+        camera.setTarget(pose.target.x, pose.target.y, pose.target.z);
+      }
+      keys.add(key);
+    }
+  };
+  const keyup = (e: KeyboardEvent) => keys.delete(e.key.toLowerCase());
+  let last = performance.now(),
+    walkFrame = 0;
+  const tick = (now: number) => {
+    const dt = (now - last) / 1000;
+    last = now;
+    if (mode() === "walk" && document.activeElement === canvas && keys.size) {
+      const has = (...k: string[]) => (k.some((v) => keys.has(v)) ? 1 : 0);
+      const pose = walkStep(
+        camera.getPosition(),
+        camera.getTarget(),
+        has("w", "arrowup") - has("s", "arrowdown"),
+        has("d", "arrowright") - has("a", "arrowleft"),
+        has("e") - has("q"),
+        dt,
+      );
+      camera.setPosition(pose.eye.x, pose.eye.y, pose.eye.z);
+      camera.setTarget(pose.target.x, pose.target.y, pose.target.z);
+    } else keys.clear();
+    walkFrame = requestAnimationFrame(tick);
+  };
+  walkFrame = requestAnimationFrame(tick);
+  canvas.addEventListener("keydown", keydown);
+  window.addEventListener("keyup", keyup);
+  window.addEventListener("blur", clearKeys);
+  canvas.addEventListener("blur", clearKeys);
+  canvas.addEventListener("pointerdown", onMouseDown);
+  canvas.addEventListener("pointermove", onMouseMove);
+  canvas.addEventListener("pointerup", stopDrag);
+  canvas.addEventListener("pointercancel", stopDrag);
+  canvas.addEventListener("lostpointercapture", stopDrag);
+
   canvas.addEventListener("wheel", onWheel, { passive: false });
   canvas.addEventListener("contextmenu", onContextMenu);
   canvas.style.cursor = "grab";
 
   return () => {
-    canvas.removeEventListener("mousedown", onMouseDown);
-    window.removeEventListener("mousemove", onMouseMove);
-    window.removeEventListener("mouseup", stopDrag);
-    canvas.removeEventListener("mouseleave", stopDrag);
+    cancelAnimationFrame(walkFrame);
+    canvas.removeEventListener("keydown", keydown);
+    window.removeEventListener("keyup", keyup);
+    window.removeEventListener("blur", clearKeys);
+    canvas.removeEventListener("blur", clearKeys);
+    canvas.removeEventListener("pointerdown", onMouseDown);
+    canvas.removeEventListener("pointermove", onMouseMove);
+    canvas.removeEventListener("pointerup", stopDrag);
+    canvas.removeEventListener("pointercancel", stopDrag);
+    canvas.removeEventListener("lostpointercapture", stopDrag);
+
     canvas.removeEventListener("wheel", onWheel);
     canvas.removeEventListener("contextmenu", onContextMenu);
   };
@@ -73,7 +184,8 @@ function setupCameraControls(
 export async function createViewer(
   canvas: HTMLCanvasElement,
   selection: { current: number | null },
-  view: { current: ViewState },
+  options: { current: NonNullable<Parameters<Renderer["render"]>[0]> },
+  mode: () => string = () => "orbit",
 ): Promise<ViewerSession> {
   const renderer = new Renderer(canvas);
   await renderer.init();
@@ -88,16 +200,20 @@ export async function createViewer(
   resize();
   const observer = new ResizeObserver(resize);
   observer.observe(canvas);
-  const cleanupControls = setupCameraControls(canvas, renderer);
+  const cleanupControls = setupCameraControls(canvas, renderer, mode);
 
   let destroyed = false;
   let frameId = 0;
+  let previousFrame = performance.now();
   const loop = () => {
     if (destroyed) return;
+    const now = performance.now();
+    if (renderer.getCamera().update((now - previousFrame) / 1000))
+      renderer.requestRender();
+    previousFrame = now;
     renderer.render({
+      ...options.current,
       selectedId: selection.current,
-      selectedIds: view.current.selected,
-      isolatedIds: view.current.isolated,
       clearColor: [0.89, 0.92, 0.9, 1],
     });
     frameId = requestAnimationFrame(loop);

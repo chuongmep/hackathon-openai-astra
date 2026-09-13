@@ -61,7 +61,7 @@ class VoiceService:
             async with asyncio.timeout(28):
                 response = await self.http.post("https://api.openai.com/v1/live/sessions", headers=headers, json={
                     "session": {"model": self.settings.voice_model, "delegation": {"type": "client"},
-                                "instructions": "You are the voice interface for Astra IFC Compliance. Delegate all model questions, counts, materials, validation and viewer requests to the backend. Speak only verified backend findings. Do not invent results. Be concise. Ask for clarification when context is missing."},
+                                "instructions": "You are the voice interface for Astra IFC Compliance. Delegate all model and Excel spreadsheet questions, counts, materials, validation and viewer requests to the backend. Speak only verified backend findings. Do not invent results. Be concise. Ask for clarification when context is missing."},
                     "transport": {"type": "webrtc", "sdp": request.sdp},
                 })
                 response.raise_for_status()

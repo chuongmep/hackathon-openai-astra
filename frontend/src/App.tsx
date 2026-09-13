@@ -264,6 +264,7 @@ export default function App() {
         model_id: model.id,
         model_revision: model.model_revision,
         selected_guids: current?.globalId ? [current.globalId] : [],
+        workbook_id: workbook?.id ?? null,
         schedule: mappingError(workbook, schedule) ? null : schedule,
         history: [],
       }

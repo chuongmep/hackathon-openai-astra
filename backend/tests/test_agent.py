@@ -91,3 +91,43 @@ def test_tool_selection_scope_and_no_arbitrary_execution(app, client, loaded):
     result, action = agent.execute("viewer_action", json.dumps({"action": "frame", "guids": [guids[0]]}), context)
     assert result["status"] == "requested"
     assert action["model_revision"] == model["revision"]
+
+
+@pytest.mark.asyncio
+async def test_general_workbook_tools_without_schedule_mappings(app, client, loaded):
+    import io
+
+    import openpyxl
+
+    model, _ = loaded
+    book = openpyxl.Workbook()
+    book.active.title = "Classification"
+    book.active.append(["Code", "Description"])
+    book.active.append(["A10", "Foundations"])
+    book.active.append(["B20", "Exterior enclosure"])
+    output = io.BytesIO()
+    book.save(output)
+    uploaded = client.post("/api/v1/workbooks", files={"file": ("standard.xlsx", output.getvalue())}).json()
+    request = ChatRequest(model_id=model["id"], model_revision=model["revision"],
+                          workbook_id=uploaded["id"], message="Understand the Excel file")
+    agent = app.state.agent
+    agent.check_context(request)
+    summary, _ = agent.execute("get_workbook_summary", "{}", request)
+    assert summary["filename"] == "standard.xlsx"
+    assert summary["sheets"][0]["name"] == "Classification"
+    page, _ = agent.execute("read_workbook_rows", '{"sheet":"Classification","limit":2}', request)
+    assert page["next_offset"] == 2
+    assert page["rows"][1]["cells"][1] == {"cell": "B2", "value": "Foundations", "truncated": False}
+    result, _ = agent.execute("read_workbook_rows", '{"sheet":"Classification","search":"enclosure"}', request)
+    assert result["rows"][0]["row"] == 3
+    with pytest.raises(AppError, match="select its columns"):
+        agent.execute("validate_materials", "{}", request)
+    call = Output(type="function_call", name="read_workbook_rows", call_id="excel-1", arguments='{"sheet":"Classification"}')
+    transport = FakeClient([Stream([SimpleNamespace(type="response.completed", response=SimpleNamespace(output=[call]))]),
+                            Stream([SimpleNamespace(type="response.output_text.delta", delta="Classification!B2 lists Foundations."),
+                                    SimpleNamespace(type="response.completed", response=SimpleNamespace(output=[]))])])
+    runner = Agent(Settings(api_key="test"), app.state.ifc, agent.validation, transport)
+    events = [event async for event in runner.run(request)]
+    assert any(name == "result" and data["tool"] == "read_workbook_rows" for name, data in events)
+    assert uploaded["id"] in transport.requests[0]["instructions"]
+    assert events[-1] == ("done", {"status": "complete"})

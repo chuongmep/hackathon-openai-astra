@@ -113,3 +113,13 @@ Domain errors use `{error: {code, message}}` with an appropriate HTTP status. Fa
 Common codes: `not_found`/`entity_not_found` (404), `revision_mismatch` (409), `upload_too_large` (413), invalid workbook/IFC/schedule (422), `voice_limit` (429), `openai_not_configured` (503), and `voice_unavailable` (502). Unknown model/material evidence is a validation finding, not a transport failure.
 
 Backend owns parsing, data truth, validation, model identity, reports, AI execution, and voice delegation. Frontend owns rendering, interaction, conversation history, selection context, microphone controls, and presentation. Replace the mock without importing Python internals or depending on Zustand store details.
+
+### General Excel questions
+
+Include optional `workbook_id` in chat and voice context independently of `schedule`.
+Uploading a workbook is sufficient for the agent to call `get_workbook_summary`
+and `read_workbook_rows` (named worksheet, physical row offset, limit, optional
+case-insensitive text search). Results carry workbook revision, worksheet, row
+numbers and cell coordinates. Pages disclose truncation; formula strings are not
+calculated. `schedule` is required only for material validation. A selected IFC
+model is still required by the current conversation contract.

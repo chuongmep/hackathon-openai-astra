@@ -31,6 +31,7 @@ class Message(StrictModel):
 
 class TaskContext(ModelContext):
     selected_guids: list[str] = Field(default_factory=list, max_length=5000)
+    workbook_id: str | None = None
     schedule: Schedule | None = None
     history: list[Message] = Field(default_factory=list, max_length=50)
 

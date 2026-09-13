@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { streamChat, type Context } from "../lib/api";
 import type { ReviewController } from "../lib/review";
+import { MarkdownMessage } from "./MarkdownMessage";
 import { VoiceClient } from "../lib/voice";
 
 export function ChatPanel({
@@ -73,7 +74,12 @@ export function ChatPanel({
       void voice.current
         ?.update({ ...current.current, history: messages.slice(-40) })
         .catch((e) => setError(String(e)));
-  }, [context?.selected_guids.join(","), context?.schedule, live]);
+  }, [
+    context?.selected_guids.join(","),
+    context?.schedule,
+    context?.workbook_id,
+    live,
+  ]);
   useEffect(() => {
     end.current?.scrollIntoView({ block: "nearest" });
   }, [messages, answer, transcripts]);
@@ -226,6 +232,11 @@ export function ChatPanel({
             : "Whole model connected"
           : "Waiting for a model"}
       </div>
+      {context?.workbook_id && (
+        <div className="chat-context">
+          Excel workbook linked · ready to read
+        </div>
+      )}
       <div className="messages">
         {!messages.length && (
           <>
@@ -261,19 +272,27 @@ export function ChatPanel({
         {messages.map((m, i) => (
           <div key={i} className={`message ${m.role}`}>
             <small>{m.role === "user" ? "YOU" : "ASTRA"}</small>
-            <p>{m.content}</p>
+            {m.role === "assistant" ? (
+              <MarkdownMessage>{m.content}</MarkdownMessage>
+            ) : (
+              <p>{m.content}</p>
+            )}
           </div>
         ))}
         {answer && (
           <div className="message assistant">
             <small>ASTRA</small>
-            <p>{answer}</p>
+            <MarkdownMessage>{answer}</MarkdownMessage>
           </div>
         )}
         {transcripts.map((m, i) => (
           <div key={`voice-${i}`} className={`message ${m.role}`}>
             <small>{m.role === "user" ? "YOU · VOICE" : "GPT-LIVE"}</small>
-            <p>{m.content}</p>
+            {m.role === "assistant" ? (
+              <MarkdownMessage>{m.content}</MarkdownMessage>
+            ) : (
+              <p>{m.content}</p>
+            )}
           </div>
         ))}
         {(busy || live || connecting) && progress && (

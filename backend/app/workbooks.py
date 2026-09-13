@@ -1,4 +1,5 @@
 import io
+import json
 import zipfile
 from collections import Counter
 
@@ -40,6 +41,59 @@ class WorkbookService:
         finally:
             book.close()
         return self.storage.public(self.storage.persist_file("workbook", filename, content, {"sheets": previews}))
+
+    def summary(self, workbook_id):
+        record = self.storage.get("workbook", workbook_id)
+        public = self.storage.public(record)
+        return {"workbook_id": workbook_id, "filename": public["filename"],
+                "revision": public["revision"],
+                "sheets": [{"name": s["name"], "rows": s["rows"], "columns": s["columns"],
+                            "preview": [[v[:200] if isinstance(v, str) else v for v in row[:10]]
+                                        for row in s["preview"][:3]]} for s in public["sheets"][:20]],
+                "sheet_count": len(public["sheets"]), "previews_partial": True}
+
+    def read_rows(self, workbook_id, sheet, offset=0, limit=30, search=None):
+        if not 0 <= offset <= 100000 or not 1 <= limit <= 100:
+            raise AppError(422, "invalid_page", "Use row offset 0–100000 and limit 1–100")
+        record = self.storage.get("workbook", workbook_id)
+        book = open_book(self.storage.file(record).read_bytes())
+        try:
+            if sheet not in book.sheetnames:
+                raise AppError(422, "invalid_sheet", "Choose a worksheet returned by get_workbook_summary")
+            ws = book[sheet]
+            last = min(ws.max_row or 0, 100000)
+            rows = []
+            scanned = offset
+            size = 0
+            # Bound scans and provider input even on wide or very large workbooks.
+            end = min(last, offset + 1000)
+            for number, values in enumerate(ws.iter_rows(min_row=offset + 1, max_row=end,
+                                                         max_col=min(ws.max_column or 1, 50), values_only=True), start=offset + 1):
+                if number > end:
+                    break
+                scanned = number
+                if search and not any(search.casefold() in str(v).casefold() for v in values if v is not None):
+                    continue
+                cells = [{"cell": f"{openpyxl.utils.get_column_letter(col)}{number}",
+                          "value": cell_value(value) if not isinstance(value, str) else value[:300],
+                          "truncated": isinstance(value, str) and len(value) > 300}
+                         for col, value in enumerate(values, 1) if value is not None]
+                row = {"row": number, "cells": cells}
+                row_size = len(json.dumps(row))
+                if rows and size + row_size > 30000:
+                    scanned = number - 1
+                    break
+                size += row_size
+                rows.append(row)
+                if len(rows) >= limit:
+                    break
+            return {"workbook_id": workbook_id, "revision": record["revision"], "sheet": sheet,
+                    "rows": rows, "next_offset": scanned if scanned < last else None,
+                    "total_rows": ws.max_row, "columns_truncated": (ws.max_column or 0) > 50,
+                    "rows_truncated": (ws.max_row or 0) > 100000,
+                    "note": "Original cell values; formulas are strings, not evaluated results."}
+        finally:
+            book.close()
 
     def schedule(self, config: Schedule):
         record = self.storage.get("workbook", config.workbook_id)

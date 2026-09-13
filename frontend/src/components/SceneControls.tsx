@@ -147,7 +147,7 @@ export function SceneControls({
             disabled={!loaded}
             title="Zoom out"
             aria-label="Zoom out"
-            onClick={() => renderer?.getCamera().zoom(180)}
+            onClick={() => c.zoom(180)}
           >
             <Minus size={18} />
           </button>
@@ -155,7 +155,7 @@ export function SceneControls({
             disabled={!loaded}
             title="Zoom in"
             aria-label="Zoom in"
-            onClick={() => renderer?.getCamera().zoom(-180)}
+            onClick={() => c.zoom(-180)}
           >
             <Plus size={18} />
           </button>

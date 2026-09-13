@@ -64,6 +64,8 @@ test("view cube restores orbit mode after walking or panning", () => {
     enableFirstPersonMode: (v: boolean) => calls.push(`walk:${v}`),
     setInteractionMode: (v: string) => calls.push(v),
     setUp: () => {},
+    getPosition: () => ({ x: 0, y: 2, z: 10 }),
+    getTarget: () => ({ x: 0, y: 2, z: 0 }),
     setPresetView: (v: string) => calls.push(v),
   };
   c.renderer = {

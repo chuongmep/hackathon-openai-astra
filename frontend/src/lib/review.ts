@@ -46,6 +46,7 @@ export class ReviewController {
   rows: ModelRow[] = [];
   modelKey = "";
   name = "";
+  focusScene: () => void = () => {};
   select: (id: number | null) => void = () => {};
   state = {
     selected: null as number | null,
@@ -72,7 +73,19 @@ export class ReviewController {
   update(patch: Partial<typeof this.state>) {
     if (patch.mode && patch.mode !== this.state.mode) {
       this.renderer?.getCamera().reset();
-      this.renderer?.getCamera().enableFirstPersonMode(patch.mode === "walk");
+      const camera = this.renderer?.getCamera();
+      camera?.setInteractionMode("all");
+      camera?.enableFirstPersonMode(patch.mode === "walk");
+      if (patch.mode === "walk" && camera) {
+        const eye = camera.getPosition(),
+          target = camera.getTarget();
+        const dx = target.x - eye.x,
+          dz = target.z - eye.z;
+        if (Math.hypot(dx, dz) < 0.01)
+          camera.setTarget(eye.x, eye.y, eye.z - 1);
+        camera.setUp(0, 1, 0);
+        this.focusScene();
+      }
     }
     this.state = { ...this.state, ...patch };
     this.apply();
@@ -83,16 +96,23 @@ export class ReviewController {
     const camera = this.renderer?.getCamera();
     camera?.reset();
     camera?.enableFirstPersonMode(false);
-    camera?.setInteractionMode("orbit");
+    camera?.setInteractionMode("all");
     camera?.setUp(0, 1, 0);
     this.renderer?.fitToView();
+  }
+  zoom(delta: number) {
+    const camera = this.renderer?.getCamera();
+    camera?.reset();
+    camera?.setInteractionMode("all");
+    camera?.zoom(delta);
+    this.renderer?.requestRender();
   }
   presetView(view: "top" | "bottom" | "front" | "back" | "left" | "right") {
     this.update({ mode: "orbit" });
     const camera = this.renderer?.getCamera();
     camera?.reset();
     camera?.enableFirstPersonMode(false);
-    camera?.setInteractionMode("orbit");
+    camera?.setInteractionMode("all");
     camera?.setPresetView(view, this.renderer?.getModelBounds() ?? undefined);
     this.renderer?.requestRender();
   }
@@ -195,6 +215,7 @@ export class ReviewController {
   }
   restore(view: Viewpoint) {
     this.update({
+      mode: "orbit",
       selected: view.selected,
       isolated: view.isolated,
       hidden: view.hidden,
@@ -247,6 +268,7 @@ export class ReviewController {
   }
   reset() {
     this.update({
+      mode: "orbit",
       isolated: null,
       hidden: [],
       section: emptySection(),

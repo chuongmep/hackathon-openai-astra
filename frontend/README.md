@@ -79,3 +79,12 @@ Inspired by the workflow in [Autodesk's AI-aided design demo](https://github.com
 Integration boundaries: `src/lib/review.ts` owns shared scene/review actions; `src/lib/webmcp.ts` exposes them to browser agents; `src/components/ReviewPanel.tsx` is the human review form. The existing `src/mock-api/` remains the replacement point for a later chat backend. Tool outputs and IFC property text are data, not agent instructions.
 
 Properties can be moved by dragging their heading and resized with the bottom-right handle. Focus either handle and use arrow keys for keyboard adjustment. The panel stays within the scene when the surrounding splits change.
+
+
+### Navigation controls and verification
+
+Left-drag orbits; middle/right-drag and Shift-drag pan, including during walkthrough. Wheel zoom works in every navigation mode (pixel, line, and page wheel deltas are normalized). Pointer capture keeps dragging active outside the canvas and cancellation stops it. Walkthrough focuses the canvas; WASD/arrows move, Q/E change elevation, and Escape exits. Typing in chat does not move the camera. Home, view-cube faces, Reset, and restored issues exit walkthrough.
+
+Navigation regression tests exercise the actual IFC Lite Camera with pointer, wheel and keyboard events, including pan/zoom after the renderer was restricted to orbit-only mode. The renderer must remain in `all` interaction mode: app-level event routing chooses the operation. Setting the renderer to `orbit` blocks its pan and zoom APIs.
+
+Latest validation: 16 automated tests and production build passed; sample IFC load, wheel zoom, pan, walkthrough movement/exit, properties, isolation/section, coloring/measurement, issue restoration, local chat, and chat/sheet toggles checked in browser. XLSX serialization is covered by a workbook round-trip test. Physical middle-button hardware and microphone conversation were not exercised by browser automation; middle-button event routing is covered by the real-camera regression test. Walkthrough remains free navigation without collision/gravity.

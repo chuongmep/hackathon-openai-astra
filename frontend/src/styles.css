@@ -1094,7 +1094,7 @@ dd {
   display: flex;
   flex-shrink: 0;
   min-height: 0;
-  max-width: calc(100vw - 540px);
+  max-width: 25vw;
 }
 .chat-slot[hidden] {
   display: none;
@@ -1152,8 +1152,8 @@ dd {
 }
 .chat-bottom textarea {
   display: block;
-  min-height: 76px;
-  max-height: 160px;
+  min-height: 56px;
+  max-height: 140px;
   padding: 2px 2px 10px;
   overflow-y: auto;
 }

@@ -5,7 +5,7 @@
 import { walkStep, lookTarget } from "./walkthrough";
 import { Renderer } from "@ifc-lite/renderer";
 type ViewerSession = { renderer: Renderer; destroy: () => void };
-function setupCameraControls(
+export function setupCameraControls(
   canvas: HTMLCanvasElement,
   renderer: Renderer,
   mode: () => string,
@@ -16,10 +16,12 @@ function setupCameraControls(
   let lastX = 0;
   let lastY = 0;
 
-  const onMouseDown = (event: MouseEvent) => {
+  const onMouseDown = (event: PointerEvent) => {
     if (event.button > 2) return;
+    event.preventDefault();
+    canvas.setPointerCapture(event.pointerId);
     camera.reset();
-    camera.setInteractionMode("orbit");
+    camera.setInteractionMode("all");
     canvas.focus();
     isDragging = true;
     isPanning =
@@ -32,14 +34,16 @@ function setupCameraControls(
     canvas.style.cursor = isPanning ? "move" : "grabbing";
   };
 
-  const onMouseMove = (event: MouseEvent) => {
+  const onMouseMove = (event: PointerEvent) => {
     if (!isDragging) return;
     const deltaX = event.clientX - lastX;
     const deltaY = event.clientY - lastY;
     lastX = event.clientX;
     lastY = event.clientY;
 
-    if (mode() === "walk") {
+    if (isPanning) {
+      camera.pan(deltaX, deltaY);
+    } else if (mode() === "walk") {
       const t = lookTarget(
         camera.getPosition(),
         camera.getTarget(),
@@ -47,11 +51,10 @@ function setupCameraControls(
         deltaY,
       );
       camera.setTarget(t.x, t.y, t.z);
-    } else if (isPanning) {
-      camera.pan(deltaX, deltaY);
     } else {
       camera.orbit(deltaX, deltaY);
     }
+    renderer.requestRender();
   };
 
   const stopDrag = () => {
@@ -62,7 +65,17 @@ function setupCameraControls(
 
   const onWheel = (event: WheelEvent) => {
     event.preventDefault();
-    if (mode() !== "walk") camera.zoom(event.deltaY);
+    camera.reset();
+    camera.setInteractionMode("all");
+    const delta =
+      event.deltaY *
+      (event.deltaMode === 1
+        ? 16
+        : event.deltaMode === 2
+          ? canvas.clientHeight
+          : 1);
+    camera.zoom(delta);
+    renderer.requestRender();
   };
 
   const onContextMenu = (event: MouseEvent) => {
@@ -141,9 +154,11 @@ function setupCameraControls(
   window.addEventListener("keyup", keyup);
   window.addEventListener("blur", clearKeys);
   canvas.addEventListener("blur", clearKeys);
-  canvas.addEventListener("mousedown", onMouseDown);
-  window.addEventListener("mousemove", onMouseMove);
-  window.addEventListener("mouseup", stopDrag);
+  canvas.addEventListener("pointerdown", onMouseDown);
+  canvas.addEventListener("pointermove", onMouseMove);
+  canvas.addEventListener("pointerup", stopDrag);
+  canvas.addEventListener("pointercancel", stopDrag);
+  canvas.addEventListener("lostpointercapture", stopDrag);
 
   canvas.addEventListener("wheel", onWheel, { passive: false });
   canvas.addEventListener("contextmenu", onContextMenu);
@@ -155,9 +170,11 @@ function setupCameraControls(
     window.removeEventListener("keyup", keyup);
     window.removeEventListener("blur", clearKeys);
     canvas.removeEventListener("blur", clearKeys);
-    canvas.removeEventListener("mousedown", onMouseDown);
-    window.removeEventListener("mousemove", onMouseMove);
-    window.removeEventListener("mouseup", stopDrag);
+    canvas.removeEventListener("pointerdown", onMouseDown);
+    canvas.removeEventListener("pointermove", onMouseMove);
+    canvas.removeEventListener("pointerup", stopDrag);
+    canvas.removeEventListener("pointercancel", stopDrag);
+    canvas.removeEventListener("lostpointercapture", stopDrag);
 
     canvas.removeEventListener("wheel", onWheel);
     canvas.removeEventListener("contextmenu", onContextMenu);

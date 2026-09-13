@@ -57,7 +57,7 @@ export function ChatPanel({
     const field = textareaRef.current;
     if (field && visible) {
       field.style.height = "auto";
-      field.style.height = `${Math.min(160, Math.max(76, field.scrollHeight))}px`;
+      field.style.height = `${Math.min(140, Math.max(56, field.scrollHeight))}px`;
     }
   }, [draft, visible]);
   useEffect(() => {
@@ -270,7 +270,7 @@ export function ChatPanel({
         >
           <textarea
             ref={textareaRef}
-            rows={3}
+            rows={2}
             aria-label="Message model assistant"
             placeholder="Ask about your model…"
             value={draft}

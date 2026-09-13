@@ -49,6 +49,14 @@ export default function App() {
     };
   }, [review]);
 
+  const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
+  const chatMaxWidth = viewportWidth * 0.25;
+  const chatMinWidth = Math.min(280, chatMaxWidth);
+  useEffect(() => {
+    const updateWidth = () => setViewportWidth(window.innerWidth);
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
   const canvas = useRef<HTMLCanvasElement>(null),
     input = useRef<HTMLInputElement>(null),
     session = useRef<Awaited<ReturnType<typeof createViewer>>>(),
@@ -120,6 +128,7 @@ export default function App() {
       geometry?.dispose();
     };
   }, []);
+  review.focusScene = () => canvas.current?.focus();
   function select(id: number | null) {
     selection.current = id;
     review.update({ selected: id });
@@ -207,7 +216,11 @@ export default function App() {
   function resize(e: React.PointerEvent, kind: "tree" | "sheet" | "chat") {
     const start = kind !== "sheet" ? e.clientX : e.clientY,
       initial =
-        kind === "tree" ? treeWidth : kind === "chat" ? chatWidth : sheetHeight,
+        kind === "tree"
+          ? treeWidth
+          : kind === "chat"
+            ? Math.min(chatWidth, chatMaxWidth)
+            : sheetHeight,
       target = e.currentTarget;
     target.setPointerCapture(e.pointerId);
     const move = (event: Event) => {
@@ -217,8 +230,8 @@ export default function App() {
       else if (kind === "chat")
         setChatWidth(
           Math.max(
-            280,
-            Math.min(520, window.innerWidth - 540, initial + start - p.clientX),
+            chatMinWidth,
+            Math.min(chatMaxWidth, initial + start - p.clientX),
           ),
         );
       else
@@ -347,6 +360,10 @@ export default function App() {
                 ref={canvas}
                 aria-label="Interactive IFC 3D model"
                 tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape" && review.state.mode === "walk")
+                    review.update({ mode: "orbit" });
+                }}
                 onPointerDown={(e) => {
                   down.current = { x: e.clientX, y: e.clientY };
                 }}
@@ -626,9 +643,9 @@ export default function App() {
             role="separator"
             aria-label="Resize chat panel"
             aria-orientation="vertical"
-            aria-valuemin={280}
-            aria-valuemax={520}
-            aria-valuenow={chatWidth}
+            aria-valuemin={chatMinWidth}
+            aria-valuemax={chatMaxWidth}
+            aria-valuenow={Math.min(chatWidth, chatMaxWidth)}
             tabIndex={0}
             onPointerDown={(e) => resize(e, "chat")}
             onKeyDown={(e) => {
@@ -636,11 +653,11 @@ export default function App() {
                 e.preventDefault();
                 setChatWidth((w) =>
                   Math.max(
-                    280,
+                    chatMinWidth,
                     Math.min(
-                      520,
-                      window.innerWidth - 540,
-                      w + (e.key === "ArrowLeft" ? 20 : -20),
+                      chatMaxWidth,
+                      Math.min(w, chatMaxWidth) +
+                        (e.key === "ArrowLeft" ? 20 : -20),
                     ),
                   ),
                 );
@@ -670,7 +687,7 @@ export default function App() {
           id="model-chat"
           className="chat-slot"
           hidden={!chatVisible}
-          style={{ width: chatWidth }}
+          style={{ width: Math.min(chatWidth, chatMaxWidth) }}
         >
           <ChatPanel
             key={name}

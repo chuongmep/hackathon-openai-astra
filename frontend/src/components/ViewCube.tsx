@@ -116,7 +116,7 @@ export function ViewCube({
     c.update({ mode: "orbit" });
     camera.reset();
     camera.enableFirstPersonMode(false);
-    camera.setInteractionMode("orbit");
+    camera.setInteractionMode("all");
     const eye = camera.getPosition(),
       target = camera.getTarget(),
       distance = Math.max(
@@ -199,7 +199,7 @@ export function ViewCube({
           if (!d.moved) {
             c.update({ mode: "orbit" });
             c.renderer?.getCamera().reset();
-            c.renderer?.getCamera().setInteractionMode("orbit");
+            c.renderer?.getCamera().setInteractionMode("all");
             e.currentTarget.setPointerCapture(e.pointerId);
             d.moved = true;
           }

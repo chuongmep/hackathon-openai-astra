@@ -17,7 +17,7 @@ Open [the workbench](http://localhost:3000) and [interactive API docs](http://lo
 
 If your key is in `backend/.env`, load that file explicitly: `docker compose --env-file backend/.env up -d`. After changing the key, rerun that command to recreate the backend with the updated environment. Plain Compose commands read the root `.env` by default.
 
-The frontend image builds the mock with Bun and the embedded viewer with pnpm/Turbo. The `ifc-lite` submodule is pinned to `176f0c06e7190a194efa267ebacf0d81ee69e178` (`@ifc-lite/wasm@7.0.0`), matching the published WASM runtime. Do not replace it with a newer checkout while retaining the old WASM binary.
+The default frontend image builds the teammate’s `frontend/` workspace with Bun and its locked IFC Lite parser/geometry/renderer packages. `frontend-mock/` remains the earlier standalone integration reference; its embedded viewer is built with pnpm/Turbo. The `ifc-lite` submodule is pinned to `176f0c06e7190a194efa267ebacf0d81ee69e178` (`@ifc-lite/wasm@7.0.0`), matching the published WASM runtime. Do not replace it with a newer checkout while retaining the old WASM binary.
 
 ## Demo
 
@@ -54,7 +54,11 @@ cd backend
 uv run python -m scripts.create_demo_schedule ../assets/racbasicsampleproject.ifc ../assets/demo-door-schedule.xlsx
 ```
 
-## Mock development
+## Integrated frontend development
+
+See [frontend/README.md](frontend/README.md) for the default app, local development, and the live demo workflow.
+
+## Legacy mock development
 
 Use Node 24, pnpm 10.8.1, and Bun 1.4.2. Build the embed SDK **before** installing the mock's local file dependencies.
 

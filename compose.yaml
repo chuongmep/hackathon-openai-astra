@@ -14,8 +14,8 @@ services:
     restart: unless-stopped
   frontend:
     build:
-      context: .
-      dockerfile: frontend-mock/Dockerfile
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - "127.0.0.1:${PORT:-3000}:80"
     depends_on:

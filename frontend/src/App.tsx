@@ -14,6 +14,19 @@ import {
   Upload,
   X,
 } from "lucide-react";
+import {
+  api,
+  upload,
+  type Model,
+  type Schedule,
+  type Report,
+  type Action,
+  type Context,
+  type Entity,
+  type Workbook,
+} from "./lib/api";
+import { resolveAction, meshBounds } from "./lib/actions";
+import { ValidationPanel } from "./components/ValidationPanel";
 import { createViewer } from "./lib/viewer";
 import {
   exportWorkbook,
@@ -24,6 +37,18 @@ import {
 import { ModelTree } from "./components/ModelTree";
 import { ChatPanel } from "./components/ChatPanel";
 export default function App() {
+  const [model, setModel] = useState<Model | null>(null);
+  const [workbook, setWorkbook] = useState<Workbook>();
+  const [schedule, setSchedule] = useState<Schedule | null>(null);
+  const [report, setReport] = useState<Report | null>(null);
+  const [details, setDetails] = useState<unknown>(null);
+  const active = useRef<Model | null>(null);
+  const parsed = useRef<IfcDataStore>();
+  const meshesRef = useRef<import("@ifc-lite/geometry").MeshData[]>([]);
+  const view = useRef<{ selected: Set<number>; isolated: Set<number> | null }>({
+    selected: new Set(),
+    isolated: null,
+  });
   const canvas = useRef<HTMLCanvasElement>(null),
     input = useRef<HTMLInputElement>(null),
     session = useRef<Awaited<ReturnType<typeof createViewer>>>(),
@@ -58,7 +83,7 @@ export default function App() {
           throw new Error(
             "WebGPU unavailable. Use current Chrome or Edge on localhost or HTTPS.",
           );
-        own = await createViewer(canvas.current!, selection);
+        own = await createViewer(canvas.current!, selection, view);
         if (cancelled) {
           own.destroy();
           return;
@@ -89,6 +114,7 @@ export default function App() {
   }, []);
   function select(id: number | null) {
     selection.current = id;
+    view.current.selected = new Set();
     if (id !== null) setPropertiesOpen(true);
     setSelected(id);
     session.current?.renderer.requestRender();
@@ -102,10 +128,19 @@ export default function App() {
     loading.current = true;
     setBusy(true);
     setError("");
-    const token = generation.current;
+    const token = ++generation.current;
+    active.current = null;
+    setModel(null);
+    setReport(null);
+    setDetails(null);
+    select(null);
     try {
       setStatus("Reading IFC metadata…");
-      const bytes = await file.arrayBuffer();
+      setStatus("Uploading IFC to backend…");
+      const uploaded = await upload<Model>("/models", file);
+      const original = await fetch(`/api/v1/models/${uploaded.id}/file`);
+      if (!original.ok) throw new Error("Unable to fetch original IFC");
+      const bytes = await original.arrayBuffer();
       const next = await new IfcParser().parseColumnar(bytes);
       if (token !== generation.current) return;
       const meshes: import("@ifc-lite/geometry").MeshData[] = [];
@@ -120,16 +155,32 @@ export default function App() {
       }
       if (!meshes.length)
         throw new Error("No renderable geometry found in this file.");
+      const entityRows: Entity[] = [];
+      for (let offset = 0; ; offset += 500) {
+        const page = await api<{ items: Entity[]; total: number }>(
+          `/models/${uploaded.id}/entities?offset=${offset}&limit=500`,
+        );
+        entityRows.push(...page.items);
+        if (entityRows.length >= page.total) break;
+      }
+      if (token !== generation.current) return;
+      parsed.current = next;
+      meshesRef.current = meshes;
+      view.current = { selected: new Set(), isolated: null };
       session.current!.renderer.loadGeometry(meshes);
       session.current!.renderer.fitToView();
       setStore(next);
       setRows(
         modelRows(
           next,
-          meshes.map((m) => m.expressId),
+          entityRows
+            .map((e) => next.entities.getExpressIdByGlobalId(e.GlobalId))
+            .filter((id) => id > 0),
         ),
       );
       setName(file.name);
+      active.current = uploaded;
+      setModel(uploaded);
       select(null);
       setQuery("");
       setStatus("Model loaded");
@@ -166,6 +217,76 @@ export default function App() {
         ),
       [rows, sheetQuery],
     );
+  const context: Context | null = model
+    ? {
+        model_id: model.id,
+        model_revision: model.model_revision,
+        selected_guids: current?.globalId ? [current.globalId] : [],
+        schedule,
+        history: [],
+      }
+    : null;
+  useEffect(() => {
+    setDetails(null);
+    if (!model || !current?.globalId) return;
+    const controller = new AbortController();
+    void api(`/models/${model.id}/entities/${current.globalId}`, {
+      signal: controller.signal,
+    })
+      .then(setDetails)
+      .catch((e) => {
+        if (!controller.signal.aborted) setError(String(e));
+      });
+    return () => controller.abort();
+  }, [model, current?.globalId]);
+  function applyAction(action: Action) {
+    try {
+      const ids = resolveAction(action, active.current, parsed.current);
+      if (ids === null) return;
+      const renderer = session.current!.renderer;
+      if (action.action === "reset") {
+        view.current = { selected: new Set(), isolated: null };
+        select(null);
+        renderer.fitToView();
+        return;
+      }
+      if (action.action === "select") select(ids[0]);
+      if (action.action === "highlight") view.current.selected = new Set(ids);
+      if (action.action === "isolate") {
+        view.current.isolated = new Set(ids);
+        setStatus(`${ids.length} isolated`);
+      }
+      if (action.action === "frame") {
+        const wanted = new Set(ids);
+        const bounds = meshBounds(
+          meshesRef.current.filter((mesh) => wanted.has(mesh.expressId)),
+        );
+        if (bounds) renderer.getCamera().fitToBounds(bounds.min, bounds.max);
+      }
+      renderer.requestRender();
+    } catch (e) {
+      setError(String(e));
+    }
+  }
+  function aiEvent(event: string, raw: unknown) {
+    if (event === "viewer_action") applyAction(raw as Action);
+    if (event === "result") {
+      const data = raw as { tool: string; data: Partial<Report> };
+      if (data.tool === "validate_materials" && data.data.id)
+        void api<Report>(`/validations/${data.data.id}`)
+          .then((result) => {
+            if (
+              active.current?.id === result.model_id &&
+              active.current.model_revision === result.model_revision
+            ) {
+              setReport(result);
+              setSheet(true);
+              setSheetHeight(360);
+            }
+          })
+          .catch((e) => setError(String(e)));
+    }
+  }
   function resize(e: React.PointerEvent, kind: "tree" | "sheet") {
     const start = kind === "tree" ? e.clientX : e.clientY,
       initial = kind === "tree" ? treeWidth : sheetHeight,
@@ -337,7 +458,12 @@ export default function App() {
               <div className="viewer-tools">
                 <button
                   aria-label="Fit model to view"
-                  onClick={() => session.current?.renderer.fitToView()}
+                  onClick={() => {
+                    view.current = { selected: new Set(), isolated: null };
+                    select(null);
+                    session.current?.renderer.fitToView();
+                    setStatus("Model loaded");
+                  }}
                   disabled={!rows.length}
                 >
                   <Maximize size={18} />
@@ -419,6 +545,14 @@ export default function App() {
                           <dt>Global ID</dt>
                           <dd>{current?.globalId}</dd>
                         </dl>
+                        {details !== null && (
+                          <details>
+                            <summary>
+                              Verified backend properties and materials
+                            </summary>
+                            <pre>{JSON.stringify(details, null, 2)}</pre>
+                          </details>
+                        )}
                         {psets.map((p, i) => (
                           <details key={i} open>
                             <summary>{p.name}</summary>
@@ -542,57 +676,86 @@ export default function App() {
             </div>
             {sheet && (
               <>
-                <div className="table-scroll">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>Element name</th>
-                        <th>IFC class</th>
-                        <th>Level</th>
-                        <th>Global ID</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filtered.map((row) => (
-                        <tr
-                          key={row.id}
-                          className={selected === row.id ? "selected" : ""}
-                          onClick={() => {
-                            select(row.id);
-                            setPropertiesOpen(true);
-                          }}
-                        >
-                          <td>
-                            <button
-                              className="row-select"
-                              onClick={() => {
-                                select(row.id);
-                                setPropertiesOpen(true);
-                              }}
-                              aria-label={`Select element ${row.id}`}
-                            >
-                              {row.id}
-                            </button>
-                          </td>
-                          <td title={row.name}>{row.name}</td>
-                          <td>
-                            <span className="type-pill">{row.type}</span>
-                          </td>
-                          <td>{row.level}</td>
-                          <td className="mono">{row.globalId}</td>
+                <ValidationPanel
+                  book={workbook}
+                  onBook={setWorkbook}
+                  model={model}
+                  schedule={schedule}
+                  onSchedule={setSchedule}
+                  report={report}
+                  onReport={(r) => {
+                    setReport(r);
+                    if (r) setSheetHeight(360);
+                  }}
+                  onAction={applyAction}
+                  onSelect={(guid) => {
+                    const id =
+                      parsed.current?.entities.getExpressIdByGlobalId(guid);
+                    if (id && id > 0) {
+                      select(id);
+                      if (model)
+                        applyAction({
+                          model_id: model.id,
+                          model_revision: model.model_revision,
+                          action: "frame",
+                          guids: [guid],
+                        });
+                    }
+                  }}
+                />
+                {!report && (
+                  <div className="table-scroll">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Element name</th>
+                          <th>IFC class</th>
+                          <th>Level</th>
+                          <th>Global ID</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  {!filtered.length && (
-                    <p className="empty-copy">
-                      {rows.length
-                        ? "No elements match your filter."
-                        : "Open a model to explore its element data."}
-                    </p>
-                  )}
-                </div>
+                      </thead>
+                      <tbody>
+                        {filtered.map((row) => (
+                          <tr
+                            key={row.id}
+                            className={selected === row.id ? "selected" : ""}
+                            onClick={() => {
+                              select(row.id);
+                              setPropertiesOpen(true);
+                            }}
+                          >
+                            <td>
+                              <button
+                                className="row-select"
+                                onClick={() => {
+                                  select(row.id);
+                                  setPropertiesOpen(true);
+                                }}
+                                aria-label={`Select element ${row.id}`}
+                              >
+                                {row.id}
+                              </button>
+                            </td>
+                            <td title={row.name}>{row.name}</td>
+                            <td>
+                              <span className="type-pill">{row.type}</span>
+                            </td>
+                            <td>{row.level}</td>
+                            <td className="mono">{row.globalId}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                    {!filtered.length && (
+                      <p className="empty-copy">
+                        {rows.length
+                          ? "No elements match your filter."
+                          : "Open a model to explore its element data."}
+                      </p>
+                    )}
+                  </div>
+                )}
                 <div className="sheet-footer">
                   <span>
                     <Table2 size={12} /> Elements
@@ -605,7 +768,11 @@ export default function App() {
             )}
           </section>
         </section>
-        <ChatPanel key={name} rows={rows} selected={current} name={name} />
+        <ChatPanel
+          key={model?.id ?? "no-model"}
+          context={context}
+          onEvent={aiEvent}
+        />
       </div>
     </div>
   );

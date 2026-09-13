@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { Renderer } from "@ifc-lite/renderer";
+export type ViewState = { selected: Set<number>; isolated: Set<number> | null };
 type ViewerSession = { renderer: Renderer; destroy: () => void };
 function setupCameraControls(
   canvas: HTMLCanvasElement,
@@ -72,6 +73,7 @@ function setupCameraControls(
 export async function createViewer(
   canvas: HTMLCanvasElement,
   selection: { current: number | null },
+  view: { current: ViewState },
 ): Promise<ViewerSession> {
   const renderer = new Renderer(canvas);
   await renderer.init();
@@ -94,6 +96,8 @@ export async function createViewer(
     if (destroyed) return;
     renderer.render({
       selectedId: selection.current,
+      selectedIds: view.current.selected,
+      isolatedIds: view.current.isolated,
       clearColor: [0.89, 0.92, 0.9, 1],
     });
     frameId = requestAnimationFrame(loop);

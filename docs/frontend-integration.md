@@ -1,6 +1,6 @@
 # Frontend integration contract
 
-Base path: `/api/v1`. Development backend: `http://127.0.0.1:8000`; use a frontend reverse proxy, as the mock does. Docker serves everything at `http://localhost:3000`. No credentials belong in the frontend bundle. OpenAPI is at `/api/openapi.json`; Swagger UI is at `/api/docs`.
+Base path: `/api/v1`. Development backend: `http://127.0.0.1:8000`; use a frontend reverse proxy, as both frontend clients do. Docker serves everything at `http://localhost:3000`. No credentials belong in the frontend bundle. OpenAPI is at `/api/openapi.json`; Swagger UI is at `/api/docs`.
 
 ## Model identity and selection
 
@@ -19,7 +19,7 @@ Upload with multipart field `file` to `POST /models`. The response includes:
 
 Numbers above are illustrative except the supplied sample's door count. `id`/`revision` are storage fields; `model_id`/`model_revision` are the canonical context names. Serve the exact uploaded bytes from `GET /models/{id}/file` to your viewer. `GET /models` and `GET /models/{id}` restore previous uploads after a page reload.
 
-An IFC `GlobalId` is a string. An Express ID is a file-local integer. Neither is the viewer's federation ID. All cross-component actions carry the model ID, revision, and GUID strings. The mock uses `selectByGuid`, then its returned numeric IDs for `isolate`, `setColors`, and `fitToView`.
+An IFC `GlobalId` is a string. An Express ID is a file-local integer. Neither is the viewer's federation ID. All cross-component actions carry the model ID, revision, and GUID strings. The legacy embed mock uses `selectByGuid`. The integrated frontend uses `entities.getExpressIdByGlobalId` on its local parser and then applies the IDs to its single-model renderer. Both reject mismatched model/revision actions.
 
 `GET /models/{id}/entities?ifc_class=IfcDoor&offset=0&limit=100` returns `{model_id, model_revision, total, offset, limit, items}`. Each item has `GlobalId`, `express_id`, `ifc_class`, `Name`, and `storey`. `total` is the full result count; `items` is one page. Limits are 1–500; offsets start at zero. Optional filters: `search` (case-insensitive name substring), `storey_guid`, and `property_set` + `property_name` + `property_value` (string comparison of effective property value).
 

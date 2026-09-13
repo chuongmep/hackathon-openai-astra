@@ -28,3 +28,12 @@ jobs:
         working-directory: ifc-lite
       - run: bun install --frozen-lockfile && bun test && bun run build
         working-directory: frontend-mock
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.2'
+      - run: bun install --frozen-lockfile && bun test && bun run build
+        working-directory: frontend

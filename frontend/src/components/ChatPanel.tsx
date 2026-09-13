@@ -1,148 +1,151 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowUp, AudioLines, Mic, Square, Sparkles } from "lucide-react";
-import { assistantAPI } from "../mock-api";
-import type { ModelRow } from "../lib/model";
-type Recognition = {
-  continuous: boolean;
-  interimResults: boolean;
-  lang: string;
-  start(): void;
-  stop(): void;
-  onresult:
-    | ((event: {
-        results: { isFinal: boolean; 0: { transcript: string } }[];
-        resultIndex: number;
-      }) => void)
-    | null;
-  onerror: ((event: { error: string }) => void) | null;
-  onend: (() => void) | null;
-};
-type SpeechWindow = Window & {
-  SpeechRecognition?: new () => Recognition;
-  webkitSpeechRecognition?: new () => Recognition;
-};
+import { streamChat, type Context } from "../lib/api";
+import { VoiceClient } from "../lib/voice";
+
 export function ChatPanel({
-  rows,
-  selected,
-  name,
+  context,
+  onEvent,
 }: {
-  rows: ModelRow[];
-  selected?: ModelRow;
-  name: string;
+  context: Context | null;
+  onEvent: (name: string, data: unknown) => void;
 }) {
-  const [messages, setMessages] = useState<{ role: string; text: string }[]>(
-      [],
-    ),
-    [draft, setDraft] = useState(""),
-    [busy, setBusy] = useState(false),
-    [live, setLive] = useState(false),
-    [error, setError] = useState("");
-  const recognition = useRef<Recognition>(),
-    liveRef = useRef(false),
-    replying = useRef(false),
-    end = useRef<HTMLDivElement>(null),
-    sendRef = useRef<(text: string) => void>(() => {});
+  const [messages, setMessages] = useState<Context["history"]>([]);
+  const [draft, setDraft] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [live, setLive] = useState(false);
+  const [connecting, setConnecting] = useState(false);
+  const [error, setError] = useState("");
+  const [progress, setProgress] = useState("");
+  const [transcripts, setTranscripts] = useState<Context["history"]>([]);
+  const abort = useRef<AbortController>();
+  const voice = useRef<VoiceClient>();
+  const mounted = useRef(true);
+  const end = useRef<HTMLDivElement>(null);
+  const current = useRef(context);
+  current.current = context;
+  const eventHandler = useRef(onEvent);
+  eventHandler.current = onEvent;
   useEffect(() => {
-    if (messages.length)
-      end.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  }, [messages, busy]);
-  useEffect(
-    () => () => {
-      liveRef.current = false;
-      recognition.current?.stop();
-      window.speechSynthesis?.cancel();
-    },
-    [],
-  );
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      abort.current?.abort();
+      void voice.current?.stop().catch(() => {});
+    };
+  }, []);
+  useEffect(() => {
+    if (live && current.current)
+      void voice.current
+        ?.update({ ...current.current, history: messages.slice(-40) })
+        .catch((e) => setError(String(e)));
+  }, [context?.selected_guids.join(","), context?.schedule, live]);
+  useEffect(() => {
+    end.current?.scrollIntoView({ block: "nearest" });
+  }, [messages, answer, transcripts]);
+  function event(name: string, raw: unknown) {
+    if (!mounted.current) return;
+    const data = raw as {
+      message?: string;
+      tool?: string;
+      role: "user" | "assistant";
+      text: string;
+    };
+    if (name === "error") setError(data.message || "Voice connection failed");
+    if (name === "progress")
+      setProgress(
+        data.message ||
+          `Checking ${data.tool?.replaceAll("_", " ") || "model"}…`,
+      );
+    if (name === "closed") {
+      setLive(false);
+      setConnecting(false);
+      setProgress("");
+    }
+    if (name === "transcript")
+      setTranscripts((old) => {
+        const last = old[old.length - 1];
+        return last?.role === data.role
+          ? [
+              ...old.slice(0, -1),
+              { ...last, content: last.content + data.text },
+            ]
+          : [...old, { role: data.role, content: data.text }];
+      });
+    eventHandler.current(name, raw);
+  }
   async function send(text: string) {
-    if (!text.trim() || busy) return;
+    if (!context || !text.trim() || busy || live || connecting) return;
     setDraft("");
     setBusy(true);
-    replying.current = true;
+    setAnswer("");
     setError("");
-    recognition.current?.stop();
-    setMessages((m) => [...m, { role: "user", text }]);
+    const history = messages.slice(-40);
+    let response = "";
+    let complete = false;
+    setMessages((old) => [...old, { role: "user", content: text }]);
+    const controller = new AbortController();
+    abort.current = controller;
     try {
-      const response = await assistantAPI.chat({
-        message: text,
-        modelName: name,
-        elements: rows,
-        selected,
-      });
-      setMessages((m) => [...m, { role: "assistant", text: response.text }]);
-      if (liveRef.current && window.speechSynthesis) {
-        const utterance = new SpeechSynthesisUtterance(response.text);
-        utterance.onend = () => {
-          replying.current = false;
-          if (liveRef.current) startListening();
-        };
-        utterance.onerror = () => stop();
-        window.speechSynthesis.speak(utterance);
-      }
-    } catch {
-      setError("Could not get a reply. Please try again.");
-      stop();
-    } finally {
-      setBusy(false);
-    }
-  }
-  sendRef.current = (text) => void send(text);
-  function stop() {
-    liveRef.current = false;
-    replying.current = false;
-    setLive(false);
-    recognition.current?.stop();
-    window.speechSynthesis?.cancel();
-  }
-  function startListening() {
-    try {
-      recognition.current?.start();
-    } catch {
-      setError("Unable to resume microphone. Start voice conversation again.");
-      stop();
-    }
-  }
-  function toggleVoice() {
-    if (live) {
-      stop();
-      return;
-    }
-    const Constructor =
-      (window as SpeechWindow).SpeechRecognition ||
-      (window as SpeechWindow).webkitSpeechRecognition;
-    if (!Constructor) {
-      setError(
-        "Speech recognition is unavailable. Use Chrome or Edge, or type a message.",
+      await streamChat(
+        { ...context, history, message: text },
+        controller.signal,
+        (name, raw) => {
+          if (!mounted.current) return;
+          if (name === "text_delta") {
+            response += (raw as { text: string }).text;
+            setAnswer(response);
+          }
+          if (name === "done")
+            complete = (raw as { status: string }).status === "complete";
+          event(name, raw);
+        },
       );
+      if (mounted.current && complete) {
+        setMessages((old) => [
+          ...old,
+          { role: "assistant", content: response },
+        ]);
+        setAnswer("");
+      }
+    } catch (e) {
+      if (!controller.signal.aborted)
+        setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      if (mounted.current) {
+        setBusy(false);
+        setProgress("");
+      }
+    }
+  }
+  async function toggleVoice() {
+    if (live) {
+      await voice.current?.stop().catch((e) => setError(String(e)));
+      setLive(false);
       return;
     }
-    const r = new Constructor();
-    recognition.current = r;
-    r.lang = "en-US";
-    r.continuous = false;
-    r.interimResults = false;
-    r.onresult = (event) => {
-      const result = event.results[event.resultIndex];
-      if (result.isFinal) sendRef.current(result[0].transcript);
-    };
-    r.onerror = (event) => {
-      setError(`Microphone: ${event.error}. You can still type a message.`);
-      stop();
-    };
-    r.onend = () => {
-      if (liveRef.current && !replying.current) {
-        setError("Listening ended. Start voice conversation to try again.");
-        stop();
-      }
-    };
-    liveRef.current = true;
-    setLive(true);
+    if (!context || connecting) return;
+    const client = new VoiceClient();
+    voice.current = client;
+    setConnecting(true);
     setError("");
     try {
-      r.start();
-    } catch {
-      setError("Unable to start microphone. Check browser permissions.");
-      stop();
+      await client.start({ ...context, history: messages.slice(-40) }, event);
+      if (!mounted.current) {
+        await client.stop();
+        return;
+      }
+      if (current.current)
+        await client.update({
+          ...current.current,
+          history: messages.slice(-40),
+        });
+      setLive(true);
+    } catch (e) {
+      if (mounted.current) setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      if (mounted.current) setConnecting(false);
     }
   }
   return (
@@ -151,59 +154,75 @@ export function ChatPanel({
         <span>
           <Sparkles size={16} /> Model assistant
         </span>
-        <span className="badge">DEMO</span>
+        <span className="badge">ASTRA</span>
       </div>
       <div className="chat-context">
         <span className="dot" />{" "}
-        {rows.length ? "Model context connected" : "Waiting for a model"}
+        {context
+          ? context.selected_guids.length
+            ? "Selected element context"
+            : "Whole model connected"
+          : "Waiting for a model"}
       </div>
       <div className="messages">
         {!messages.length && (
-          <div className="assistant-intro">
-            <h2>
-              A clearer view of
-              <br />
-              your building.
-            </h2>
-            <p>
-              Explore your model, understand its elements, and turn questions
-              into insights.
-            </p>
-          </div>
-        )}
-        {!messages.length && (
-          <div className="suggestions">
-            {[
-              "Summarize this model",
-              "How many walls are there?",
-              "Tell me about the selected element",
-            ].map((text) => (
-              <button
-                key={text}
-                onClick={() => void send(text)}
-                disabled={busy}
-              >
-                {text}
-                <ArrowUp size={14} />
-              </button>
-            ))}
-          </div>
+          <>
+            <div className="assistant-intro">
+              <h2>
+                A clearer view of
+                <br />
+                your building.
+              </h2>
+              <p>
+                Explore your model, verify materials, and ask questions backed
+                by IFC data.
+              </p>
+            </div>
+            <div className="suggestions">
+              {[
+                "How many doors are there? Show them.",
+                "Check the schedule materials and isolate failures.",
+                "Tell me about the selected element",
+              ].map((text) => (
+                <button
+                  key={text}
+                  disabled={!context || busy || live || connecting}
+                  onClick={() => void send(text)}
+                >
+                  {text}
+                  <ArrowUp size={14} />
+                </button>
+              ))}
+            </div>
+          </>
         )}
         {messages.map((m, i) => (
           <div key={i} className={`message ${m.role}`}>
-            <small>{m.role === "user" ? "YOU" : "MODEL ASSISTANT"}</small>
-            <p>{m.text}</p>
+            <small>{m.role === "user" ? "YOU" : "ASTRA"}</small>
+            <p>{m.content}</p>
           </div>
         ))}
-        {busy && <p className="muted">Reading model context…</p>}
+        {answer && (
+          <div className="message assistant">
+            <small>ASTRA</small>
+            <p>{answer}</p>
+          </div>
+        )}
+        {transcripts.map((m, i) => (
+          <div key={`voice-${i}`} className={`message ${m.role}`}>
+            <small>{m.role === "user" ? "YOU · VOICE" : "GPT-LIVE"}</small>
+            <p>{m.content}</p>
+          </div>
+        ))}
+        {(busy || live) && progress && <p className="muted">{progress}</p>}
         <div ref={end} />
       </div>
       <div className="chat-bottom">
-        {selected && (
+        {context?.selected_guids.length ? (
           <div className="selection-context">
-            Context · #{selected.id} {selected.type}
+            Context · {context.selected_guids[0]}
           </div>
-        )}
+        ) : null}
         {error && (
           <p role="alert" className="error">
             {error}
@@ -228,11 +247,11 @@ export function ChatPanel({
             }}
           />
           <div className="composer-actions">
-            <span>Model-aware mock chat</span>
+            <span>Verified IFC data</span>
             <button
               className="send"
               aria-label="Send message"
-              disabled={busy || !draft.trim()}
+              disabled={!context || busy || live || connecting || !draft.trim()}
             >
               <ArrowUp size={18} />
             </button>
@@ -240,15 +259,19 @@ export function ChatPanel({
         </form>
         <button
           className={`voice ${live ? "active" : ""}`}
-          onClick={toggleVoice}
-          disabled={busy && !live}
+          onClick={() => void toggleVoice()}
+          disabled={!context || busy || connecting}
         >
           {live ? <Square size={16} /> : <Mic size={16} />}{" "}
-          {live ? "End voice conversation" : "Start voice conversation"}
+          {connecting
+            ? "Connecting…"
+            : live
+              ? "End voice conversation"
+              : "Start voice conversation"}
           <AudioLines size={19} />
         </button>
         <p className="fine-print">
-          Browser speech · demo replies · no AI backend
+          Astra tools · GPT-Live audio · read-only model
         </p>
       </div>
     </aside>

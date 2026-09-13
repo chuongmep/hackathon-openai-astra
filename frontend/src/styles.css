@@ -1083,3 +1083,45 @@ dd {
   align-items: center;
   gap: 5px;
 }
+
+.schedule-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #dfe6e2;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+.schedule-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.schedule-controls input:not([type="file"]),
+.schedule-controls select {
+  width: 130px;
+  padding: 5px;
+  border: 1px solid #ccd9d1;
+  border-radius: 4px;
+  background: white;
+}
+.schedule-controls input[type="number"] {
+  width: 60px;
+}
+.schedule-upload input {
+  max-width: 180px;
+}
+.schedule-controls a {
+  color: #147d73;
+}
+.message p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.scene-properties pre {
+  font-size: 11px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

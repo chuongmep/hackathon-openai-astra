@@ -1,6 +1,4 @@
-services:
-  frontend:
-    build: .
-    ports:
-      - "8080:80"
-    restart: unless-stopped
+# Convenience entrypoint for the complete app. Prefer running Compose at repo root.
+name: astra-ifc-compliance
+include:
+  - ../compose.yaml

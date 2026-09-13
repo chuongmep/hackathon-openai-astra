@@ -7,7 +7,6 @@ Read-only IFC model questions and door-material schedule checks, with a local 3D
 Requirements: Docker Desktop, Git, and a WebGPU-capable browser. OpenAI access is only needed for chat/voice.
 
 ```sh
-git submodule update --init --recursive
 cp .env.example .env
 # Set OPENAI_API_KEY in .env to enable AI features.
 docker compose up --build -d
@@ -17,7 +16,7 @@ Open [the workbench](http://localhost:3000) and [interactive API docs](http://lo
 
 If your key is in `backend/.env`, load that file explicitly: `docker compose --env-file backend/.env up -d`. After changing the key, rerun that command to recreate the backend with the updated environment. Plain Compose commands read the root `.env` by default.
 
-The default frontend image builds the teammate’s `frontend/` workspace with Bun and its locked IFC Lite parser/geometry/renderer packages. `frontend-mock/` remains the earlier standalone integration reference; its embedded viewer is built with pnpm/Turbo. The `ifc-lite` submodule is pinned to `176f0c06e7190a194efa267ebacf0d81ee69e178` (`@ifc-lite/wasm@7.0.0`), matching the published WASM runtime. Do not replace it with a newer checkout while retaining the old WASM binary.
+The default frontend image builds `frontend/` with Bun and its locked, published IFC Lite parser/geometry/renderer packages. No reference checkout or Git submodule is required. `frontend-mock/` is archived source from the earlier integration prototype; use `frontend/` for development and deployment.
 
 ## Demo
 
@@ -58,28 +57,9 @@ uv run python -m scripts.create_demo_schedule ../assets/racbasicsampleproject.if
 
 See [frontend/README.md](frontend/README.md) for the default app, local development, and the live demo workflow.
 
-## Legacy mock development
+## Archived mock
 
-Use Node 24, pnpm 10.8.1, and Bun 1.4.2. Build the embed SDK **before** installing the mock's local file dependencies.
-
-```sh
-cd ifc-lite
-pnpm install --frozen-lockfile
-pnpm build:wasm:fetch
-pnpm turbo build '--filter=@ifc-lite/viewer-embed^...' --filter=@ifc-lite/embed-sdk
-cd apps/viewer-embed
-pnpm exec vite --base=/embed/ --host 127.0.0.1 --port 3001
-```
-
-In another terminal, with the backend listening on port 8000:
-
-```sh
-cd frontend-mock
-bun install --frozen-lockfile
-bun run dev
-```
-
-`bun test` checks the SSE parser and model-aware viewer adapter. `bun run build` typechecks and builds the mock. If local SDK artifacts were built after `bun install`, run `bun install --force` once to refresh its file dependency.
+`frontend-mock/` is retained for historical reference only. Its local SDK dependencies and Dockerfile relied on the removed IFC Lite checkout and are not supported build targets. The root Compose deployment uses `frontend/`.
 
 ## AI and voice
 

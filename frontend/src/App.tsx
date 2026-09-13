@@ -26,6 +26,7 @@ import {
   type Entity,
   type Workbook,
 } from "./lib/api";
+import { mappingError } from "./lib/schedule";
 import { resolveAction, meshBounds } from "./lib/actions";
 import { ValidationPanel } from "./components/ValidationPanel";
 import { ReviewController } from "./lib/review";
@@ -263,7 +264,7 @@ export default function App() {
         model_id: model.id,
         model_revision: model.model_revision,
         selected_guids: current?.globalId ? [current.globalId] : [],
-        schedule,
+        schedule: mappingError(workbook, schedule) ? null : schedule,
         history: [],
       }
     : null;

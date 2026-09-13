@@ -9,6 +9,11 @@ import {
   type Report,
   type Action,
 } from "../lib/api";
+import {
+  suggestSchedule,
+  mappingError,
+  scheduleHeaders,
+} from "../lib/schedule";
 export function ValidationPanel({
   book,
   onBook,
@@ -34,7 +39,10 @@ export function ValidationPanel({
   const [error, setError] = useState("");
   const current = useRef(model);
   current.current = model;
+  const issue = mappingError(book, schedule);
+  const headers = book && schedule ? scheduleHeaders(book, schedule) : [];
   function mapping(s: Schedule) {
+    setError("");
     onSchedule(s);
     onReport(null);
   }
@@ -44,16 +52,7 @@ export function ValidationPanel({
     try {
       const b = await upload<Workbook>("/workbooks", file);
       onBook(b);
-      const sheet =
-        b.sheets.find((s) => s.preview[0]?.includes("ExpectedMaterial")) ??
-        b.sheets[0];
-      mapping({
-        workbook_id: b.id,
-        sheet: sheet.name,
-        header_row: 1,
-        guid_column: "GlobalId",
-        material_column: "ExpectedMaterial",
-      });
+      mapping(suggestSchedule(b));
     } catch (e) {
       setError(String(e));
     } finally {
@@ -61,7 +60,7 @@ export function ValidationPanel({
     }
   }
   async function check() {
-    if (!model || !schedule) return;
+    if (!model || !schedule || issue) return;
     const identity = model;
     setBusy(true);
     setError("");
@@ -116,9 +115,7 @@ export function ValidationPanel({
               Worksheet
               <select
                 value={schedule.sheet}
-                onChange={(e) =>
-                  mapping({ ...schedule, sheet: e.target.value })
-                }
+                onChange={(e) => mapping(suggestSchedule(book, e.target.value))}
               >
                 {book.sheets.map((s) => (
                   <option key={s.name}>{s.name}</option>
@@ -139,6 +136,8 @@ export function ValidationPanel({
             <label>
               GUID column
               <input
+                list="schedule-column-options"
+                placeholder="Choose Global ID header"
                 value={schedule.guid_column}
                 onChange={(e) =>
                   mapping({ ...schedule, guid_column: e.target.value })
@@ -148,13 +147,23 @@ export function ValidationPanel({
             <label>
               Material column
               <input
+                list="schedule-column-options"
+                placeholder="Choose expected material header"
                 value={schedule.material_column}
                 onChange={(e) =>
                   mapping({ ...schedule, material_column: e.target.value })
                 }
               />
             </label>
-            <button disabled={busy || !model} onClick={() => void check()}>
+            <datalist id="schedule-column-options">
+              {[...new Set(headers)].map((header) => (
+                <option key={header} value={header} />
+              ))}
+            </datalist>
+            <button
+              disabled={busy || !model || !!issue}
+              onClick={() => void check()}
+            >
               {busy ? "Checking…" : "Check materials"}
             </button>
           </>
@@ -174,6 +183,13 @@ export function ValidationPanel({
           </>
         )}
       </div>
+      {book && schedule && (
+        <p className="muted" role="status">
+          {issue ??
+            `Ready: ${schedule.sheet}, header row ${schedule.header_row}.`}
+          {headers.length > 0 && ` Available headers: ${headers.join(", ")}`}
+        </p>
+      )}
       {error && (
         <p className="error" role="alert">
           {error}

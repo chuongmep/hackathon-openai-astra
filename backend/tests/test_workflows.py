@@ -89,3 +89,33 @@ def test_csv_sanitizes_bom_and_controls():
     for value in ["=1", "+1", "-1", "@a", "\ttext", "\rtext", "\ufeff=1", "  =1"]:
         assert csv_safe(value).startswith("'")
     assert csv_safe("Steel") == "Steel"
+
+
+def test_schedule_header_normalization_and_actionable_errors(client, loaded):
+    import openpyxl
+
+    model, guids = loaded
+    def validate(headers, guid_column="GlobalId", material_column="ExpectedMaterial"):
+        book = openpyxl.Workbook()
+        book.active.title = "Materials"
+        book.active.append(["Schedule title"])
+        book.active.append(headers)
+        book.active.append([guids[0], "Steel", None])
+        output = io.BytesIO()
+        book.save(output)
+        uploaded = client.post("/api/v1/workbooks", files={"file": ("schedule.xlsx", output.getvalue())}).json()
+        return client.post("/api/v1/validations", json={"model_id": model["id"], "model_revision": model["revision"],
+            "schedule": {"workbook_id": uploaded["id"], "sheet": "Materials", "header_row": 2,
+                         "guid_column": guid_column, "material_column": material_column}})
+
+    result = validate([" Global ID ", "Expected Material"])
+    assert result.status_code == 201, result.text
+    assert result.json()["findings"][0]["status"] == "pass"
+    assert result.json()["findings"][0]["source"]["row"] == 3
+    missing = validate(["Code", "Description"])
+    assert missing.status_code == 422
+    message = missing.json()["error"]["message"]
+    assert "Materials" in message and "row 2" in message and "Code" in message
+    duplicate = validate(["GlobalId", "ExpectedMaterial", "GLOBAL ID"])
+    assert duplicate.status_code == 422
+    assert "Duplicate" in duplicate.json()["error"]["message"]

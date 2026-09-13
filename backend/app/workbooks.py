@@ -52,12 +52,20 @@ class WorkbookService:
                 raise AppError(422, "schedule_too_large", "Schedule is limited to 100,000 rows and 200 columns")
             rows = sheet.iter_rows(min_row=config.header_row, values_only=True)
             headers = [str(x).strip() if x is not None else "" for x in next(rows, ())]
-            for column in (config.guid_column, config.material_column):
-                if headers.count(column) != 1:
-                    raise AppError(422, "invalid_columns", f"Expected exactly one header named {column}")
-            if config.guid_column == config.material_column:
+            # Header spelling is case/whitespace insensitive; entity GUIDs remain exact.
+            def normalize(value):
+                return "".join(value.split()).casefold()
+            normalized = [normalize(header) for header in headers]
+            columns = [normalize(config.guid_column), normalize(config.material_column)]
+            for column, normalized_column in zip((config.guid_column, config.material_column), columns):
+                count = normalized.count(normalized_column) if normalized_column else 0
+                if count != 1:
+                    reason = "Missing" if count == 0 else "Duplicate"
+                    available = ", ".join(repr(h) for h in headers if h)[:500] or "(empty row)"
+                    raise AppError(422, "invalid_columns", f"{reason} column {column!r} in worksheet {config.sheet!r}, header row {config.header_row}. Available headers: {available}. Choose the correct worksheet, header row and column mappings. Material validation requires IFC GlobalIds and expected materials.")
+            if columns[0] == columns[1]:
                 raise AppError(422, "invalid_columns", "GUID and material columns must be different")
-            gi, mi = headers.index(config.guid_column), headers.index(config.material_column)
+            gi, mi = (normalized.index(column) for column in columns)
             result = []
             for number, cells in enumerate(rows, start=config.header_row + 1):
                 guid, expected = cells[gi], cells[mi]

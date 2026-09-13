@@ -61,3 +61,10 @@ Checked locally on 2026-09-13 (macOS ARM64, Docker Desktop).
 - TypeScript and Docker production build passed; backend regression suite passed 16 tests with 3 opt-in live tests deselected. Frontend regression suite includes camera navigation, review, SSE, GUID/revision guards, and voice cleanup checks. Live paid AI calls and human microphone playback were not repeated for this merge.
 - Final merged frontend suite: **25 passed**; together with the backend suite, **41 tests passed**. The deployed API smoke passed: 16 doors, 13 passing / 1 failing / 2 unknown schedule rows, 1 uncovered door, exact original IFC bytes, and CSV export.
 - Browser smoke loaded the sample through the backend and rendered 496 model rows with the new scene controls and registered WebMCP tools. `Reset view` ran as a local review command through the integrated chat. Chat collapse/reopen worked and retained the conversation. This merge's live OpenAI/microphone behavior was not re-tested.
+
+## Spreadsheet header mapping fix
+
+- Removed assumed row-1 `GlobalId` / `ExpectedMaterial` mappings on upload. The frontend now suggests unambiguous compatible headers in the first ten preview rows, retains actual spelling, re-detects after worksheet changes, and lists available headers for explicit mapping.
+- Missing/duplicate mappings disable direct validation and are omitted from chat/voice context, so a workbook mapping error cannot block unrelated model questions. Classification workbooks and model exports without expected materials are explicitly identified as insufficient for material validation.
+- Backend header matching ignores case and whitespace (`Global ID` and `GlobalId` are compatible) while entity GUID matching remains exact. Duplicate normalized headers remain errors. Error responses identify the worksheet, header row, and available columns.
+- Tests: 17 backend tests passed (3 live tests deselected); 29 frontend tests passed. Regression cases cover title rows, spaced headers, incompatible exports/classification sheets, duplicates, sheet changes, and preserved spreadsheet source-row evidence. TypeScript and backend workbook lint passed.

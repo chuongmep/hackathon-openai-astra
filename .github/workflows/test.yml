@@ -1,0 +1,30 @@
+name: Tests
+on: [push, pull_request]
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.12.5'
+      - run: uv sync --project backend --frozen
+      - run: uv run --project backend pytest backend/tests -m 'not live'
+      - run: uv run --project backend ruff check --config backend/pyproject.toml backend/app backend/tests backend/scripts
+  mock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.2'
+      - run: npm install --global pnpm@10.8.1
+      - run: pnpm install --frozen-lockfile && pnpm turbo build --filter=@ifc-lite/embed-sdk
+        working-directory: ifc-lite
+      - run: bun install --frozen-lockfile && bun test && bun run build
+        working-directory: frontend-mock

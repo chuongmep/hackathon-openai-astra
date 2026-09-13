@@ -1,0 +1,24 @@
+[project]
+name = "astra-ifc-compliance"
+version = "0.1.0"
+description = "Read-only IFC queries, material schedule checks, and voice assistance"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "fastapi>=0.115,<1", "uvicorn[standard]>=0.34,<1",
+  "python-multipart>=0.0.20", "ifcopenshell>=0.8.3,<0.9",
+  "openpyxl>=3.1.5,<4", "openai>=2,<3", "httpx>=0.28,<1",
+  "websockets>=15,<17",
+]
+
+[dependency-groups]
+dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.12"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"
+markers = ["live: opt-in tests requiring OpenAI credentials", "sample: supplied sample IFC integration"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"

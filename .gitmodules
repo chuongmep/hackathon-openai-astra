@@ -1,0 +1,3 @@
+[submodule "ifc-lite"]
+	path = ifc-lite
+	url = https://github.com/LTplus-AG/ifc-lite.git

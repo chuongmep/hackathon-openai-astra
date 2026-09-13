@@ -1,0 +1,26 @@
+name: astra-ifc-compliance
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DATA_DIR: /data
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      ASTRA_MODEL: ${ASTRA_MODEL:-gpt-6-astra}
+      VOICE_MODEL: ${VOICE_MODEL:-gpt-live-1}
+    volumes:
+      - astra-data:/data
+    restart: unless-stopped
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend-mock/Dockerfile
+    ports:
+      - "127.0.0.1:${PORT:-3000}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+volumes:
+  astra-data:

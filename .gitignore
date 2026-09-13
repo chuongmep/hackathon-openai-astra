@@ -1,0 +1,13 @@
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+data/
+node_modules/
+dist/
+playwright-report/
+test-results/
+.pnpm-store/
+.DS_Store

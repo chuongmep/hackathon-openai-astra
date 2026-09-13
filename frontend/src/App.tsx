@@ -1,8 +1,10 @@
+import { FloatingProperties } from "./components/FloatingProperties";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { GeometryProcessor } from "@ifc-lite/geometry";
 import { IfcParser, type IfcDataStore } from "@ifc-lite/parser";
 import {
   Box,
+  PanelRightOpen,
   ChevronDown,
   ChevronUp,
   Download,
@@ -12,8 +14,10 @@ import {
   Search,
   Table2,
   Upload,
-  X,
 } from "lucide-react";
+import { ReviewController } from "./lib/review";
+import { registerReviewTools } from "./lib/webmcp";
+import { ReviewPanel } from "./components/ReviewPanel";
 import { createViewer } from "./lib/viewer";
 import {
   exportWorkbook,
@@ -23,7 +27,28 @@ import {
 } from "./lib/model";
 import { ModelTree } from "./components/ModelTree";
 import { ChatPanel } from "./components/ChatPanel";
+import { SceneControls, type SceneOptions } from "./components/SceneControls";
 export default function App() {
+  const sceneOptions = useRef<SceneOptions>({});
+  const [review] = useState(() => new ReviewController(sceneOptions));
+  const [bridgeStatus, setBridgeStatus] = useState("Local tools");
+  review.select = select;
+  useEffect(() => {
+    const abort = new AbortController();
+    let dispose: (() => void) | undefined;
+    const timer = window.setTimeout(() => {
+      void registerReviewTools(review, setBridgeStatus, abort).then((fn) => {
+        if (abort.signal.aborted) fn();
+        else dispose = fn;
+      });
+    }, 0);
+    return () => {
+      window.clearTimeout(timer);
+      abort.abort();
+      dispose?.();
+    };
+  }, [review]);
+
   const canvas = useRef<HTMLCanvasElement>(null),
     input = useRef<HTMLInputElement>(null),
     session = useRef<Awaited<ReturnType<typeof createViewer>>>(),
@@ -45,6 +70,8 @@ export default function App() {
     [sheet, setSheet] = useState(true),
     [sheetHeight, setSheetHeight] = useState(240),
     [treeWidth, setTreeWidth] = useState(265),
+    [chatWidth, setChatWidth] = useState(330),
+    [chatVisible, setChatVisible] = useState(true),
     [sheetQuery, setSheetQuery] = useState(""),
     [exporting, setExporting] = useState(false);
   useEffect(() => {
@@ -58,7 +85,12 @@ export default function App() {
           throw new Error(
             "WebGPU unavailable. Use current Chrome or Edge on localhost or HTTPS.",
           );
-        own = await createViewer(canvas.current!, selection);
+        own = await createViewer(
+          canvas.current!,
+          selection,
+          sceneOptions,
+          () => review.state.mode,
+        );
         if (cancelled) {
           own.destroy();
           return;
@@ -70,6 +102,7 @@ export default function App() {
           return;
         }
         session.current = own;
+        review.renderer = own.renderer;
         processor.current = geometry;
         setReady(true);
         setStatus("Ready to explore");
@@ -89,6 +122,7 @@ export default function App() {
   }, []);
   function select(id: number | null) {
     selection.current = id;
+    review.update({ selected: id });
     if (id !== null) setPropertiesOpen(true);
     setSelected(id);
     session.current?.renderer.requestRender();
@@ -123,12 +157,16 @@ export default function App() {
       session.current!.renderer.loadGeometry(meshes);
       session.current!.renderer.fitToView();
       setStore(next);
-      setRows(
-        modelRows(
-          next,
-          meshes.map((m) => m.expressId),
-        ),
+      const nextRows = modelRows(
+        next,
+        meshes.map((m) => m.expressId),
       );
+      setRows(nextRows);
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      const modelKey = Array.from(new Uint8Array(digest), (b) =>
+        b.toString(16).padStart(2, "0"),
+      ).join("");
+      review.load(modelKey, file.name, next, nextRows);
       setName(file.name);
       select(null);
       setQuery("");
@@ -166,15 +204,23 @@ export default function App() {
         ),
       [rows, sheetQuery],
     );
-  function resize(e: React.PointerEvent, kind: "tree" | "sheet") {
-    const start = kind === "tree" ? e.clientX : e.clientY,
-      initial = kind === "tree" ? treeWidth : sheetHeight,
+  function resize(e: React.PointerEvent, kind: "tree" | "sheet" | "chat") {
+    const start = kind !== "sheet" ? e.clientX : e.clientY,
+      initial =
+        kind === "tree" ? treeWidth : kind === "chat" ? chatWidth : sheetHeight,
       target = e.currentTarget;
     target.setPointerCapture(e.pointerId);
     const move = (event: Event) => {
       const p = event as PointerEvent;
       if (kind === "tree")
         setTreeWidth(Math.max(210, Math.min(420, initial + p.clientX - start)));
+      else if (kind === "chat")
+        setChatWidth(
+          Math.max(
+            280,
+            Math.min(520, window.innerWidth - 540, initial + start - p.clientX),
+          ),
+        );
       else
         setSheetHeight(
           Math.max(
@@ -300,6 +346,7 @@ export default function App() {
               <canvas
                 ref={canvas}
                 aria-label="Interactive IFC 3D model"
+                tabIndex={0}
                 onPointerDown={(e) => {
                   down.current = { x: e.clientX, y: e.clientY };
                 }}
@@ -307,6 +354,7 @@ export default function App() {
                   if (
                     e.button !== 0 ||
                     busy ||
+                    review.state.mode !== "orbit" ||
                     Math.hypot(
                       e.clientX - down.current.x,
                       e.clientY - down.current.y,
@@ -318,6 +366,10 @@ export default function App() {
                     const hit = await session.current?.renderer.pick(
                       e.clientX - rect.left,
                       e.clientY - rect.top,
+                      {
+                        isolatedIds: sceneOptions.current.isolatedIds,
+                        hiddenIds: sceneOptions.current.hiddenIds,
+                      },
                     );
                     select(hit?.expressId ?? null);
                     if (hit) setPropertiesOpen(true);
@@ -328,6 +380,11 @@ export default function App() {
                   }
                 }}
               />
+              <SceneControls
+                controller={review}
+                loaded={rows.length > 0 && !busy}
+              />
+              <ReviewPanel controller={review} />
               <div className="viewport-title">
                 <span>
                   <Box size={15} /> 3D view
@@ -391,19 +448,7 @@ export default function App() {
                 </div>
               )}
               {selected !== null && propertiesOpen && (
-                <aside
-                  className="scene-properties"
-                  aria-label="Element properties"
-                >
-                  <div className="scene-properties-heading">
-                    <span>Element properties</span>
-                    <button
-                      aria-label="Close properties"
-                      onClick={() => setPropertiesOpen(false)}
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
+                <FloatingProperties onClose={() => setPropertiesOpen(false)}>
                   <div className="properties">
                     {selected !== null ? (
                       <>
@@ -445,31 +490,8 @@ export default function App() {
                       </p>
                     )}
                   </div>
-                </aside>
+                </FloatingProperties>
               )}
-              {current && (
-                <button
-                  className="selected-chip"
-                  onClick={() => setPropertiesOpen(true)}
-                >
-                  <span className="dot" />
-                  {current.type} · #{current.id}
-                  <span>View properties ↗</span>
-                </button>
-              )}
-              <div className="viewport-footer">
-                <span>
-                  <span className="dot" />
-                  {busy
-                    ? status
-                    : rows.length
-                      ? `${rows.length.toLocaleString()} elements · ${status}`
-                      : status}
-                </span>
-                <span>
-                  Drag to orbit · Shift + drag to pan · Scroll to zoom
-                </span>
-              </div>
             </main>
           </div>
           <section
@@ -495,13 +517,6 @@ export default function App() {
               />
             )}
             <div className="sheet-heading">
-              <button
-                className="sheet-toggle"
-                onClick={() => setSheet((s) => !s)}
-              >
-                <Table2 size={16} /> Model data{" "}
-                <span className="count">{rows.length}</span>
-              </button>
               <div className="sheet-actions">
                 {sheet && (
                   <>
@@ -605,7 +620,69 @@ export default function App() {
             )}
           </section>
         </section>
-        <ChatPanel key={name} rows={rows} selected={current} name={name} />
+        {chatVisible && (
+          <div
+            className="chat-resizer"
+            role="separator"
+            aria-label="Resize chat panel"
+            aria-orientation="vertical"
+            aria-valuemin={280}
+            aria-valuemax={520}
+            aria-valuenow={chatWidth}
+            tabIndex={0}
+            onPointerDown={(e) => resize(e, "chat")}
+            onKeyDown={(e) => {
+              if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+                e.preventDefault();
+                setChatWidth((w) =>
+                  Math.max(
+                    280,
+                    Math.min(
+                      520,
+                      window.innerWidth - 540,
+                      w + (e.key === "ArrowLeft" ? 20 : -20),
+                    ),
+                  ),
+                );
+              }
+            }}
+          >
+            <span />
+          </div>
+        )}
+        {!chatVisible && (
+          <aside className="chat-collapsed" aria-label="Collapsed chat panel">
+            <div className="panel-heading">
+              <button
+                className="chat-expand"
+                aria-label="Expand chat panel"
+                title="Expand chat panel"
+                aria-controls="model-chat"
+                aria-expanded={false}
+                onClick={() => setChatVisible(true)}
+              >
+                <PanelRightOpen size={17} />
+              </button>
+            </div>
+          </aside>
+        )}
+        <div
+          id="model-chat"
+          className="chat-slot"
+          hidden={!chatVisible}
+          style={{ width: chatWidth }}
+        >
+          <ChatPanel
+            key={name}
+            controller={review}
+            bridgeStatus={bridgeStatus}
+            rows={rows}
+            selected={current}
+            name={name}
+            visible={chatVisible}
+            onHide={() => setChatVisible(false)}
+          />
+        </div>
       </div>
     </div>
   );

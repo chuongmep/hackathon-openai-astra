@@ -22,7 +22,7 @@ export const assistantAPI: ModelAssistantAPI = {
     if (/select|propert|this element/i.test(message))
       return {
         text: selected
-          ? `${selected.name} is an ${selected.type} on ${selected.level}. Its Express ID is #${selected.id}. Open the Properties tab for the property sets stored in the IFC file.`
+          ? `${selected.name} is an ${selected.type} on ${selected.level}. Its Express ID is #${selected.id}. Open the scene properties panel for the property sets stored in the IFC file.`
           : "Select an element in the model, tree, or table first, then ask about the selection.",
       };
     const counts = elements.reduce<Record<string, number>>((result, row) => {

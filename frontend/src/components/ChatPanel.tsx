@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowUp, AudioLines, Mic, Square, Sparkles } from "lucide-react";
+import {
+  ArrowUp,
+  AudioLines,
+  Square,
+  Sparkles,
+  PanelRightClose,
+} from "lucide-react";
+import type { ReviewController } from "../lib/review";
 import { assistantAPI } from "../mock-api";
 import type { ModelRow } from "../lib/model";
 type Recognition = {
@@ -22,13 +29,21 @@ type SpeechWindow = Window & {
   webkitSpeechRecognition?: new () => Recognition;
 };
 export function ChatPanel({
+  controller,
+  bridgeStatus,
   rows,
   selected,
   name,
+  visible,
+  onHide,
 }: {
+  controller: ReviewController;
+  bridgeStatus: string;
   rows: ModelRow[];
   selected?: ModelRow;
   name: string;
+  visible: boolean;
+  onHide(): void;
 }) {
   const [messages, setMessages] = useState<{ role: string; text: string }[]>(
       [],
@@ -37,6 +52,17 @@ export function ChatPanel({
     [busy, setBusy] = useState(false),
     [live, setLive] = useState(false),
     [error, setError] = useState("");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    const field = textareaRef.current;
+    if (field && visible) {
+      field.style.height = "auto";
+      field.style.height = `${Math.min(160, Math.max(76, field.scrollHeight))}px`;
+    }
+  }, [draft, visible]);
+  useEffect(() => {
+    if (!visible) stop();
+  }, [visible]);
   const recognition = useRef<Recognition>(),
     liveRef = useRef(false),
     replying = useRef(false),
@@ -63,12 +89,15 @@ export function ChatPanel({
     recognition.current?.stop();
     setMessages((m) => [...m, { role: "user", text }]);
     try {
-      const response = await assistantAPI.chat({
-        message: text,
-        modelName: name,
-        elements: rows,
-        selected,
-      });
+      const action = await controller.command(text);
+      const response = action
+        ? { text: action }
+        : await assistantAPI.chat({
+            message: text,
+            modelName: name,
+            elements: rows,
+            selected,
+          });
       setMessages((m) => [...m, { role: "assistant", text: response.text }]);
       if (liveRef.current && window.speechSynthesis) {
         const utterance = new SpeechSynthesisUtterance(response.text);
@@ -79,8 +108,12 @@ export function ChatPanel({
         utterance.onerror = () => stop();
         window.speechSynthesis.speak(utterance);
       }
-    } catch {
-      setError("Could not get a reply. Please try again.");
+    } catch (e) {
+      setError(
+        e instanceof Error
+          ? e.message
+          : "Could not get a reply. Please try again.",
+      );
       stop();
     } finally {
       setBusy(false);
@@ -151,11 +184,17 @@ export function ChatPanel({
         <span>
           <Sparkles size={16} /> Model assistant
         </span>
-        <span className="badge">DEMO</span>
-      </div>
-      <div className="chat-context">
-        <span className="dot" />{" "}
-        {rows.length ? "Model context connected" : "Waiting for a model"}
+        <div className="chat-heading-actions">
+          <span className="badge">{bridgeStatus}</span>
+          <button
+            type="button"
+            aria-label="Close chat panel"
+            title="Hide chat panel"
+            onClick={onHide}
+          >
+            <PanelRightClose size={17} />
+          </button>
+        </div>
       </div>
       <div className="messages">
         {!messages.length && (
@@ -175,7 +214,9 @@ export function ChatPanel({
           <div className="suggestions">
             {[
               "Summarize this model",
-              "How many walls are there?",
+              "Isolate selected element",
+              "Measure selected element",
+              "Draft an issue",
               "Tell me about the selected element",
             ].map((text) => (
               <button
@@ -199,6 +240,18 @@ export function ChatPanel({
         <div ref={end} />
       </div>
       <div className="chat-bottom">
+        {live && (
+          <div
+            className={`voice-session ${busy ? "thinking" : ""}`}
+            role="status"
+          >
+            <div className="voice-orb" />
+            <strong>
+              {busy ? "Working with your model…" : "Voice conversation active"}
+            </strong>
+            <span>Speak a model command or question</span>
+          </div>
+        )}
         {selected && (
           <div className="selection-context">
             Context · #{selected.id} {selected.type}
@@ -216,6 +269,8 @@ export function ChatPanel({
           }}
         >
           <textarea
+            ref={textareaRef}
+            rows={3}
             aria-label="Message model assistant"
             placeholder="Ask about your model…"
             value={draft}
@@ -228,28 +283,33 @@ export function ChatPanel({
             }}
           />
           <div className="composer-actions">
-            <span>Model-aware mock chat</span>
-            <button
-              className="send"
-              aria-label="Send message"
-              disabled={busy || !draft.trim()}
-            >
-              <ArrowUp size={18} />
-            </button>
+            <span>Local model assistant</span>
+            <div className="composer-buttons">
+              <button
+                type="button"
+                className={`voice-icon ${live ? "active" : ""}`}
+                aria-label={
+                  live ? "End voice conversation" : "Start voice conversation"
+                }
+                title={
+                  live ? "End voice conversation" : "Start voice conversation"
+                }
+                aria-pressed={live}
+                onClick={toggleVoice}
+                disabled={busy && !live}
+              >
+                {live ? <Square size={17} /> : <AudioLines size={20} />}
+              </button>
+              <button
+                className="send"
+                aria-label="Send message"
+                disabled={busy || !draft.trim()}
+              >
+                <ArrowUp size={18} />
+              </button>
+            </div>
           </div>
         </form>
-        <button
-          className={`voice ${live ? "active" : ""}`}
-          onClick={toggleVoice}
-          disabled={busy && !live}
-        >
-          {live ? <Square size={16} /> : <Mic size={16} />}{" "}
-          {live ? "End voice conversation" : "Start voice conversation"}
-          <AudioLines size={19} />
-        </button>
-        <p className="fine-print">
-          Browser speech · demo replies · no AI backend
-        </p>
       </div>
     </aside>
   );

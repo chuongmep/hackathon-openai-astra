@@ -26,7 +26,8 @@ Open http://localhost:8080. The multi-stage image builds with Bun and serves sta
 ## Workspace
 
 - Open IFC or drop a `.ifc` file on the viewer. **Sample model** opens the copy of `assets/racbasicsampleproject.ifc` bundled under `public/models`.
-- Orbit with left drag, pan with Shift/right/middle drag, and zoom with the wheel. Fit to view resets the camera.
+- Orbit with left drag, pan with Shift/right/middle drag, and zoom with the wheel. The upper-left orientation cube offers top/front/right views, with all six directions in its Views menu and an isometric/orbit reset.
+- The bottom scene toolbar provides zoom in/out, isolate selected element / show all, and section cuts. Section settings expose X/Y/Z axes, position, and flip direction. Reset view restores all elements, clears the cut, and fits the model.
 - Browse the actual project/site/building/storey hierarchy or search element names, types, and IDs. Selection is shared with the renderer and sheet. Selecting an element in the tree, scene, or sheet opens the scrollable properties panel on the right inside the scene. Close it with its X and reopen it using View properties; the model tree remains visible.
 - Drag the tree divider and sheet divider to resize. Focus a divider and use arrow keys for keyboard resizing.
 - Close/reopen the sheet with its chevron. Scroll horizontally/vertically, filter rows, select an element, or export the filtered dataset to `.xlsx`.
@@ -62,3 +63,19 @@ The Bun tests parse the bundled IFC and verify hierarchy, identity, property set
 - [IFC Lite](https://github.com/LTplus-AG/ifc-lite): parser, WASM geometry, WebGPU renderer. Camera/session code adapted from its MPL-2.0 React starter; source license notice retained in `src/lib/viewer.ts`.
 - [ExcelJS](https://github.com/exceljs/exceljs): XLSX workbook generation.
 - [Bun](https://bun.com/): package installation and scripts; Vite handles the browser bundle and module workers.
+
+## AI-aided design review (IFC Lite adaptation)
+
+Inspired by the workflow in [Autodesk's AI-aided design demo](https://github.com/autodesk-platform-services/ai-aided-design-demo), implemented against the existing local IFC Lite renderer. No Autodesk account, model translation, server, or API key is needed.
+
+- The scene toolbar groups orbit/pan, zoom, isolate/hide, section, bounding-box measurement, IFC-class coloring, review issues, and reset. Colors have a scrollable legend. Reset clears visibility, section, colors, and measurement.
+- Review issues capture selection, camera pose/up direction, isolation, hidden IDs, section, and colors when the draft is created. Editing the draft retains that viewpoint. Saving is separate from drafting. Open a saved issue to restore its view.
+- Issues are stored in this browser's localStorage, keyed by SHA-256 of IFC file contents. Reopening the same file restores its issues. Different files with the same name cannot share issues. Storage is local, not a team issue tracker; assignees do not receive notifications.
+- Ten typed WebMCP tools register on `document.modelContext` (with a legacy `navigator.modelContext` fallback): `get-view-state`, `browse-hierarchy`, `get-properties`, `measure-elements`, `set-view-state`, `set-theming-color`, `list-issues`, `show-issue`, `draft-issue`, `submit-issue`. Queries are scoped to the loaded model; hierarchy/property/issue lists paginate. `AI tools ready` means registration succeeded, not that an AI service is embedded. Browsers without WebMCP retain manual and local-command features.
+- The built-in chat recognizes explicit local commands: `Isolate selected element`, `Hide selected element`, `Show all elements`, `Measure selected element`, `Color by type`, `Draft an issue`, `Show ISS-1`, `Reset view`. Other questions use the existing mock adapter. Flexible AI requests come through an external WebMCP-capable agent.
+- Voice uses browser recognition/synthesis and an animated active-session orb; it is not OpenAI Realtime or an embedded ChatGPT session. No model selector is shown because there is no configured AI provider.
+- Measurement uses axis-aligned geometry bounds in metres (Y is height). These are approximate extents, not exact surface dimensions or regulatory checks. Walkthrough uses WASD/arrows on the focused canvas, Q/E for elevation, and drag-to-look. Movement is 3 metres per second; it is free navigation without collision detection or gravity. Exact point-to-point measurement is not included.
+
+Integration boundaries: `src/lib/review.ts` owns shared scene/review actions; `src/lib/webmcp.ts` exposes them to browser agents; `src/components/ReviewPanel.tsx` is the human review form. The existing `src/mock-api/` remains the replacement point for a later chat backend. Tool outputs and IFC property text are data, not agent instructions.
+
+Properties can be moved by dragging their heading and resized with the bottom-right handle. Focus either handle and use arrow keys for keyboard adjustment. The panel stays within the scene when the surrounding splits change.

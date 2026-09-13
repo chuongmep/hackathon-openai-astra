@@ -55,15 +55,37 @@ export type Workbook = {
   sheets: { name: string; preview: (string | number | null)[][] }[];
 };
 
-export async function api<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`/api/v1${path}`, init);
+const connectionMessage =
+  "Cannot reach the model service. Make sure the backend is running, then try again.";
+
+export async function apiResponse(
+  path: string,
+  init?: RequestInit,
+): Promise<Response> {
+  let response: Response;
+  try {
+    response = await fetch(`/api/v1${path}`, init);
+  } catch (error) {
+    if (init?.signal?.aborted && init.signal.reason?.name !== "TimeoutError")
+      throw error;
+    throw new Error(connectionMessage, { cause: error });
+  }
   if (!response.ok) {
     const body = await response.json().catch(() => null);
     throw new Error(
       body?.error?.message ??
-        JSON.stringify(body?.detail ?? response.statusText),
+        (body?.detail
+          ? JSON.stringify(body.detail)
+          : response.status >= 500
+            ? connectionMessage
+            : `Request failed (${response.status}): ${response.statusText || "Please try again."}`),
     );
   }
+  return response;
+}
+
+export async function api<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await apiResponse(path, init);
   return response.status === 204 ? (undefined as T) : response.json();
 }
 export const json = (body: unknown, method = "POST"): RequestInit => ({
@@ -71,7 +93,10 @@ export const json = (body: unknown, method = "POST"): RequestInit => ({
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify(body),
 });
-export const upload = <T>(path: string, file: File) => {
+export const upload = async <T>(path: string, file: File) => {
+  // Fail before sending a large body: an unavailable dev proxy can reset the
+  // upload connection instead of returning its HTTP error to the browser.
+  await api("/health", { signal: AbortSignal.timeout(10_000) });
   const body = new FormData();
   body.append("file", file);
   return api<T>(path, { method: "POST", body });
@@ -82,11 +107,7 @@ export async function streamChat(
   signal: AbortSignal,
   onEvent: (event: string, data: unknown) => void,
 ) {
-  const response = await fetch("/api/v1/chat", { ...json(body), signal });
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error?.message ?? JSON.stringify(error));
-  }
+  const response = await apiResponse("/chat", { ...json(body), signal });
   if (!response.body) throw new Error("Chat stream unavailable");
   const reader = response.body.getReader();
   const decoder = new TextDecoder();

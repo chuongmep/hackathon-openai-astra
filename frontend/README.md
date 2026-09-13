@@ -22,6 +22,25 @@ bun run dev
 
 Vite proxies `/api` to the backend. Use a WebGPU-capable browser on localhost or HTTPS.
 
+To develop the frontend against the running Docker app instead of a separate
+Python server, create `frontend/.env.local` with:
+
+```dotenv
+API_PROXY_TARGET=http://127.0.0.1:3000
+```
+
+Then start or restart `bun run dev`. Use the port printed by Vite (usually 5173).
+If Compose uses a custom `PORT`, use that port in `API_PROXY_TARGET` too. This
+setting is only read by the Vite server and contains no API keys. Remove it to
+return to the default Python backend on port 8000. Production Docker uses Nginx
+and does not need this setting.
+
+If opening an IFC reports that the model service is unreachable, check
+`/api/v1/health` on the same URL as the frontend. Start the backend or correct the
+proxy target before retrying. Uploads check this connection before sending the
+file, so an unavailable backend does not interrupt a large upload with an opaque
+browser network error.
+
 ## Demo and data ownership
 
 1. Click **Sample model** or **Open IFC**. The file is uploaded to the backend; the viewer then loads the backend's exact original bytes. The model table uses backend occurrence membership, resolving each GUID through the local parser.

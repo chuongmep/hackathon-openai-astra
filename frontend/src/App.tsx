@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import {
   api,
+  apiResponse,
   upload,
   type Model,
   type Schedule,
@@ -174,11 +175,9 @@ export default function App() {
     setDetails(null);
     select(null);
     try {
-      setStatus("Reading IFC metadata…");
-      setStatus("Uploading IFC to backend…");
+      setStatus("Connecting and uploading IFC…");
       const uploaded = await upload<Model>("/models", file);
-      const original = await fetch(`/api/v1/models/${uploaded.id}/file`);
-      if (!original.ok) throw new Error("Unable to fetch original IFC");
+      const original = await apiResponse(`/models/${uploaded.id}/file`);
       const bytes = await original.arrayBuffer();
       const next = await new IfcParser().parseColumnar(bytes);
       if (token !== generation.current) return;

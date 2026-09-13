@@ -53,7 +53,7 @@ ffmpeg -v error -i output/Forma-demo.mp4 -f null -
 
 ## Silent edit from a real screen recording
 
-`edit_recording.py` uses real footage, removes loading and idle sections according to `recording-edit.json`, applies **1.2×** speed to every retained segment, and adds English descriptions in a separate footer. The full app frame stays visible. Output is 1920×1080 at 30 fps, with **no audio stream** and a maximum duration of 120 seconds. The current edit is approximately 97 seconds.
+`edit_recording.py` uses real footage, removes loading and idle sections according to `recording-edit.json`, applies **1.2×** speed to every retained segment, and adds English descriptions in a separate footer. The full app frame stays visible. Output is 1920×1080 at 30 fps, with **no audio stream** and a maximum duration of 120 seconds. The current edit is 87.5 seconds (under 90 seconds).
 
 ```sh
 python edit_recording.py '/absolute/path/to/recording.mov'

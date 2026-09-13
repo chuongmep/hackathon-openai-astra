@@ -1,11 +1,41 @@
 {
   "speed": 1.2,
   "segments": [
-    {"start":21,"end":31,"title":"Explore your IFC model","description":"See the building, model hierarchy, and connected data in one workspace."},
-    {"start":31,"end":58,"title":"Find objects through conversation","description":"Ask about an element and move from the full building to a focused view."},
-    {"start":58,"end":72,"title":"Inspect the selected object","description":"Review object identity, IFC class, dimensions, and available properties."},
-    {"start":86,"end":105,"title":"Keep the conversation connected","description":"Ask follow-up questions while the selected object stays in view."},
-    {"start":125,"end":149,"title":"Compare model data with your standard","description":"Use the linked UniFormat workbook to support classification review."},
-    {"start":149,"end":171,"title":"Review the suggested mapping","description":"Inspect classification evidence and check the suggestion before applying changes."}
+    {
+      "start": 24,
+      "end": 31,
+      "title": "Explore your IFC model",
+      "description": "See the building, model hierarchy, and connected data in one workspace."
+    },
+    {
+      "start": 31,
+      "end": 58,
+      "title": "Find objects through conversation",
+      "description": "Ask about an element and move from the full building to a focused view."
+    },
+    {
+      "start": 58,
+      "end": 72,
+      "title": "Inspect the selected object",
+      "description": "Review object identity, IFC class, dimensions, and available properties."
+    },
+    {
+      "start": 90,
+      "end": 105,
+      "title": "Keep the conversation connected",
+      "description": "Ask follow-up questions while the selected object stays in view."
+    },
+    {
+      "start": 129,
+      "end": 149,
+      "title": "Compare model data with your standard",
+      "description": "Use the linked UniFormat workbook to support classification review."
+    },
+    {
+      "start": 149,
+      "end": 171,
+      "title": "Review the suggested mapping",
+      "description": "Inspect classification evidence and check the suggestion before applying changes."
+    }
   ]
 }

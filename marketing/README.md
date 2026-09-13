@@ -50,3 +50,13 @@ All generated outputs are ignored by Git. Source files are isolated in `marketin
 ffprobe -v error -show_entries format=duration:stream=codec_name,width,height,r_frame_rate -of json output/Forma-demo.mp4
 ffmpeg -v error -i output/Forma-demo.mp4 -f null -
 ```
+
+## Silent edit from a real screen recording
+
+`edit_recording.py` uses real footage, removes loading and idle sections according to `recording-edit.json`, applies **1.2×** speed to every retained segment, and adds English descriptions in a separate footer. The full app frame stays visible. Output is 1920×1080 at 30 fps, with **no audio stream** and a maximum duration of 120 seconds. The current edit is approximately 97 seconds.
+
+```sh
+python edit_recording.py '/absolute/path/to/recording.mov'
+```
+
+Output: `output/recording-short.mp4`. Edit the source-time `start` and `end` values and descriptions in `recording-edit.json` to change the cut. This renderer uses the same Pillow/FFmpeg dependencies and fonts as the original renderer, but does not use voice synthesis. The original recording is never modified.

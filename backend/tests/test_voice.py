@@ -3,7 +3,6 @@ import json
 from types import SimpleNamespace
 
 import httpx
-
 from app.schemas import TaskContext, VoiceRequest
 from app.voice import VoiceService, VoiceSession
 
@@ -139,7 +138,6 @@ async def test_live_http_negotiation_and_authenticated_attachment():
 
 async def test_connection_failures_are_actionable_and_do_not_register_sessions():
     import pytest
-
     from app.config import AppError
 
     for failure, code, status in [
@@ -168,7 +166,6 @@ async def test_connection_failures_are_actionable_and_do_not_register_sessions()
 
 async def test_attachment_timeout_identifies_control_stage():
     import pytest
-
     from app.config import AppError
 
     async def attach(*args, **kwargs):

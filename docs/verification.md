@@ -69,6 +69,17 @@ Checked locally on 2026-09-13 (macOS ARM64, Docker Desktop).
 - Backend header matching ignores case and whitespace (`Global ID` and `GlobalId` are compatible) while entity GUID matching remains exact. Duplicate normalized headers remain errors. Error responses identify the worksheet, header row, and available columns.
 - Tests: 17 backend tests passed (3 live tests deselected); 29 frontend tests passed. Regression cases cover title rows, spaced headers, incompatible exports/classification sheets, duplicates, sheet changes, and preserved spreadsheet source-row evidence. TypeScript and backend workbook lint passed.
 
+## Combined Docker deployment verification (2026-09-13)
+
+- Built and started the current `frontend/` and `backend/` together with root Compose. Both containers report healthy; Nginx publishes `127.0.0.1:3000` and proxies the internal backend. The first build downloaded fresh base images; subsequent builds reused the cache.
+- Frontend: **29 tests passed** locally and with **Bun 1.4.2 inside the Docker build**. TypeScript and production Vite builds passed. Tests now gate production frontend image builds. Vite still reports its existing large-bundle advisory.
+- Backend: **17 tests passed**, with 3 opt-in live tests deselected, on macOS Python 3.12.13 and in the built Linux image with Python 3.12.14. Fixed three import-formatting lint findings in the voice tests; full backend Ruff check passes. The test dependencies emit two upstream deprecation warnings.
+- Extended the deployment smoke script and added an opt-in Compose `smoke` service. The host and Docker smoke runs passed: frontend JavaScript/sample delivery, isolation headers, missing-WASM 404, OpenAPI proxy, health, IFC upload/revision/original bytes, 16 doors, workbook validation (13 pass / 1 fail / 2 unknown / 1 uncovered), and CSV export. The smoke checks make no paid AI calls.
+- Browser at localhost:3000: sample upload and 3D rendering with 496 model rows, workbook upload/header detection/direct validation, failure isolation, finding selection/properties, top/home view controls, zoom, and chat hide/reopen passed. Missing-key chat feedback was shown clearly. Camera/walk/pan/wheel behavior also has unit coverage; physical middle-mouse dragging and a human walkthrough were not independently repeated.
+- Confirmed the original smoke model, exact IFC bytes, validation results, and CSV remained available through Nginx after container recreation and a backend restart. No volume was removed.
+- No OpenAI key is configured in this deployment. Health reports chat/voice unconfigured, and both routes correctly return `503 openai_not_configured`. Live model calls, microphone capture, speaker playback, and conversational interruption were not retested; historical live results above do not establish the current deployment's credential readiness.
+- The browser still reports three IFC Lite CSG fallbacks across walls `#3862` and `#58037`, plus some unsliced layer warnings. The scene renders, but exact geometry for these openings/layers is not verified. These are retained runtime limitations, not resolved by the Docker deployment.
+
 ## General Excel understanding
 
 - Added independent `workbook_id` context to text/voice, so uploads remain readable without material mappings. The UI displays a workbook-linked indicator and updates voice context on workbook replacement.
@@ -82,3 +93,9 @@ Checked locally on 2026-09-13 (macOS ARM64, Docker Desktop).
 - Replaced the native file-picker row with a styled workbook bar: file name, linked status, Upload Excel/Replace file, and an optional Material check panel. General workbook reading no longer displays validation mapping warnings by default. Worksheet and column settings use the app's existing visual language.
 - Assistant responses (including streamed text and assistant voice transcripts) render Markdown/GFM headings, emphasis, lists, code, links, and scrollable tables. Raw HTML is skipped, unsafe URLs are filtered by the renderer, and remote images are not loaded.
 - 31 frontend tests passed, including Markdown/table rendering and unsafe-content regression checks. TypeScript and Docker production build passed; the deployed empty workbook state was checked visually. Uploaded workbook controls and rendered tables are implemented, but their full browser interaction was not repeated in this UI pass.
+
+## Docker PR synchronization with main
+
+- Pulled the PR branch and fetched `main` at `d07112e` before merging. Preserved the Docker verification record together with the incoming Excel understanding and workbook/chat presentation records. Retained the removal of the reference submodule and corrected the deployment text to describe the mock as archived.
+- Merged frontend: 31 tests passed locally and in the Bun 1.4.2 Docker build; TypeScript and production builds passed. Backend: 18 tests passed, 3 opt-in live tests deselected, and Ruff passed.
+- Rebuilt the merged Compose stack; both services became healthy. The Docker smoke check passed through Nginx with the original IFC bytes, 16 doors, 13 passing / 1 failing / 2 unknown schedule rows, 1 uncovered door, and CSV export. Live AI/voice was not repeated for this merge.

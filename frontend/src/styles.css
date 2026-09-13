@@ -1793,3 +1793,251 @@ dd {
 .scene-legend {
   top: 218px;
 }
+
+/* Workbook connection and optional material-check setup. */
+.workbook-panel {
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface, #fff);
+  max-height: 65%;
+  overflow: auto;
+}
+.workbook-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  flex-wrap: wrap;
+}
+.workbook-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #eaf5f0;
+  color: #147d73;
+  flex-shrink: 0;
+}
+.workbook-identity {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+  flex: 1;
+}
+.workbook-identity strong {
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 38vw;
+}
+.workbook-identity span,
+.workbook-hint {
+  color: #71827b;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.workbook-linked {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #277c61;
+  font-size: 10px;
+  background: #edf7f1;
+  border-radius: 20px;
+  padding: 5px 9px;
+}
+.workbook-bar button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid var(--line);
+  background: white;
+  border-radius: 7px;
+  padding: 8px 10px;
+  font-size: 11px;
+  color: #36554b;
+  cursor: pointer;
+}
+.workbook-bar button:hover,
+.workbook-bar button.active {
+  background: #edf5f1;
+  border-color: #9cbbb0;
+}
+.workbook-bar button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.workbook-hint {
+  margin: -3px 18px 10px 66px;
+}
+.material-mapping {
+  margin: 0 18px 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #f7faf8;
+}
+.mapping-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: #71827b;
+}
+.mapping-intro strong {
+  color: #36554b;
+  font-size: 12px;
+}
+.material-mapping .schedule-controls {
+  padding: 12px 0 6px;
+  border: 0;
+  gap: 12px;
+}
+.material-mapping .schedule-controls label {
+  gap: 6px;
+  color: #5b7268;
+  font-size: 10px;
+}
+.material-mapping .schedule-controls input:not([type="file"]),
+.material-mapping .schedule-controls select {
+  width: 170px;
+  font: inherit;
+  font-size: 11px;
+  padding: 8px;
+  border-radius: 6px;
+}
+.material-mapping .schedule-controls input[type="number"] {
+  width: 70px;
+}
+.material-mapping .schedule-controls button {
+  background: #147d73;
+  color: white;
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 6px;
+  font-size: 11px;
+}
+.material-mapping .schedule-controls button:disabled {
+  opacity: 0.4;
+}
+.mapping-feedback {
+  margin: 6px 0 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #71827b;
+}
+.mapping-feedback.ready {
+  color: #277c61;
+}
+.workbook-results {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px;
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+}
+.workbook-results a {
+  color: #147d73;
+}
+.markdown-message {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: inherit;
+  line-height: 1.65;
+}
+.message .markdown-message p {
+  white-space: normal;
+  margin: 0 0 12px;
+}
+.markdown-message > :last-child {
+  margin-bottom: 0;
+}
+.markdown-message h1,
+.markdown-message h2,
+.markdown-message h3,
+.markdown-message h4 {
+  font-size: 1.05em;
+  line-height: 1.4;
+  margin: 18px 0 8px;
+  font-weight: 650;
+  color: #24483c;
+}
+.markdown-message > :first-child {
+  margin-top: 0;
+}
+.markdown-message ul,
+.markdown-message ol {
+  padding-left: 20px;
+  margin: 8px 0 14px;
+}
+.markdown-message li {
+  margin: 5px 0;
+}
+.markdown-message strong {
+  font-weight: 650;
+}
+.markdown-message code {
+  font-size: 0.88em;
+  background: #edf3ef;
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+.markdown-message pre {
+  overflow-x: auto;
+  padding: 12px;
+  background: #f3f6f4;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+}
+.markdown-message pre code {
+  background: transparent;
+  padding: 0;
+  white-space: pre;
+}
+.markdown-message blockquote {
+  margin: 12px 0;
+  padding-left: 12px;
+  border-left: 3px solid #99bfb0;
+  color: #61776c;
+}
+.markdown-message a {
+  color: #147d73;
+  text-decoration: underline;
+}
+.markdown-table {
+  overflow-x: auto;
+  max-width: 100%;
+  margin: 12px 0;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+}
+.markdown-table table {
+  border-collapse: collapse;
+  min-width: 100%;
+  font-size: 11px;
+  white-space: normal;
+}
+.markdown-table th,
+.markdown-table td {
+  padding: 9px 11px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  min-width: 100px;
+  max-width: 240px;
+  white-space: normal;
+}
+.markdown-table th {
+  background: #edf4f0;
+  color: #36554b;
+  font-weight: 650;
+  position: static;
+}
+.markdown-table tr:last-child td {
+  border-bottom: 0;
+}

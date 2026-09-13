@@ -19,6 +19,7 @@ export type Schedule = {
   header_row: number;
 };
 export type Context = {
+  workbook_id?: string | null;
   model_id: string;
   model_revision: string;
   selected_guids: string[];
@@ -50,6 +51,7 @@ export type Report = {
 };
 export type Workbook = {
   id: string;
+  filename?: string;
   sheets: { name: string; preview: (string | number | null)[][] }[];
 };
 

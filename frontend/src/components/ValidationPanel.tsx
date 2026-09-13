@@ -1,5 +1,12 @@
 import { useRef, useState } from "react";
 import {
+  FileSpreadsheet,
+  Upload,
+  CheckCircle2,
+  SlidersHorizontal,
+  ChevronDown,
+} from "lucide-react";
+import {
   api,
   json,
   upload,
@@ -35,6 +42,8 @@ export function ValidationPanel({
   onAction(a: Action): void;
   onSelect(guid: string): void;
 }) {
+  const fileInput = useRef<HTMLInputElement>(null);
+  const [showMapping, setShowMapping] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const current = useRef(model);
@@ -96,80 +105,149 @@ export function ValidationPanel({
   }
   return (
     <>
-      <div className="schedule-controls">
-        <label className="schedule-upload">
-          Upload schedule
+      <section className="workbook-panel" aria-label="Excel workbook">
+        <div className="workbook-bar">
+          <span className="workbook-icon">
+            <FileSpreadsheet size={20} />
+          </span>
+          <div className="workbook-identity">
+            <strong title={book?.filename}>
+              {book
+                ? book.filename || "Excel workbook"
+                : "Connect an Excel workbook"}
+            </strong>
+            <span>
+              {book
+                ? `${book.sheets.length} worksheets · Available to your AI assistant`
+                : "Add a reference, classification workbook, or material schedule"}
+            </span>
+          </div>
+          {book && (
+            <span className="workbook-linked">
+              <CheckCircle2 size={13} /> Linked
+            </span>
+          )}
+          <button
+            className="workbook-upload"
+            disabled={busy || !model}
+            onClick={() => fileInput.current?.click()}
+          >
+            <Upload size={14} />
+            {busy ? "Working…" : book ? "Replace file" : "Upload Excel"}
+          </button>
           <input
+            ref={fileInput}
+            hidden
             type="file"
             accept=".xlsx"
+            aria-label="Upload Excel workbook"
             disabled={busy || !model}
             onChange={(e) => {
               if (e.target.files?.[0]) void load(e.target.files[0]);
               e.target.value = "";
             }}
           />
-        </label>
-        {book && schedule && (
-          <>
-            <label>
-              Worksheet
-              <select
-                value={schedule.sheet}
-                onChange={(e) => mapping(suggestSchedule(book, e.target.value))}
-              >
-                {book.sheets.map((s) => (
-                  <option key={s.name}>{s.name}</option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Header row
-              <input
-                type="number"
-                min="1"
-                value={schedule.header_row}
-                onChange={(e) =>
-                  mapping({ ...schedule, header_row: Number(e.target.value) })
-                }
-              />
-            </label>
-            <label>
-              GUID column
-              <input
-                list="schedule-column-options"
-                placeholder="Choose Global ID header"
-                value={schedule.guid_column}
-                onChange={(e) =>
-                  mapping({ ...schedule, guid_column: e.target.value })
-                }
-              />
-            </label>
-            <label>
-              Material column
-              <input
-                list="schedule-column-options"
-                placeholder="Choose expected material header"
-                value={schedule.material_column}
-                onChange={(e) =>
-                  mapping({ ...schedule, material_column: e.target.value })
-                }
-              />
-            </label>
-            <datalist id="schedule-column-options">
-              {[...new Set(headers)].map((header) => (
-                <option key={header} value={header} />
-              ))}
-            </datalist>
+          {book && (
             <button
-              disabled={busy || !model || !!issue}
-              onClick={() => void check()}
+              className={`mapping-toggle ${showMapping ? "active" : ""}`}
+              aria-expanded={showMapping}
+              aria-controls="material-mapping"
+              onClick={() => setShowMapping(!showMapping)}
             >
-              {busy ? "Checking…" : "Check materials"}
+              <SlidersHorizontal size={14} />
+              Material check
+              <ChevronDown size={13} />
             </button>
-          </>
+          )}
+        </div>
+        {book && !showMapping && (
+          <p className="workbook-hint">
+            Ask the assistant about this workbook. To compare expected materials
+            with the model, set up a material check.
+          </p>
+        )}
+        {book && schedule && showMapping && (
+          <div id="material-mapping" className="material-mapping">
+            <div className="mapping-intro">
+              <strong>Compare materials with your model</strong>
+              <span>
+                Select the worksheet and columns containing IFC Global IDs and
+                expected materials.
+              </span>
+            </div>
+            <div className="schedule-controls">
+              <label>
+                Schedule worksheet
+                <select
+                  value={schedule.sheet}
+                  onChange={(e) =>
+                    mapping(suggestSchedule(book, e.target.value))
+                  }
+                >
+                  {book.sheets.map((s) => (
+                    <option key={s.name}>{s.name}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Header row
+                <input
+                  type="number"
+                  min="1"
+                  value={schedule.header_row}
+                  onChange={(e) =>
+                    mapping({ ...schedule, header_row: Number(e.target.value) })
+                  }
+                />
+              </label>
+              <label>
+                IFC Global ID
+                <input
+                  list="schedule-column-options"
+                  placeholder="Choose Global ID header"
+                  value={schedule.guid_column}
+                  onChange={(e) =>
+                    mapping({ ...schedule, guid_column: e.target.value })
+                  }
+                />
+              </label>
+              <label>
+                Expected material
+                <input
+                  list="schedule-column-options"
+                  placeholder="Choose expected material header"
+                  value={schedule.material_column}
+                  onChange={(e) =>
+                    mapping({ ...schedule, material_column: e.target.value })
+                  }
+                />
+              </label>
+              <datalist id="schedule-column-options">
+                {[...new Set(headers)].map((header) => (
+                  <option key={header} value={header} />
+                ))}
+              </datalist>
+              <button
+                disabled={busy || !model || !!issue}
+                onClick={() => void check()}
+              >
+                {busy ? "Checking…" : "Check materials"}
+              </button>
+            </div>
+            <p
+              className={`mapping-feedback ${issue ? "" : "ready"}`}
+              role="status"
+            >
+              {issue
+                ? !schedule.guid_column || !schedule.material_column
+                  ? "Select both columns to enable the check. General Excel questions are already available in chat."
+                  : issue
+                : "Mapping ready. You can now check materials."}
+            </p>
+          </div>
         )}
         {report && (
-          <>
+          <div className="workbook-results">
             <span>
               {report.counts.pass ?? 0} pass · {report.counts.fail ?? 0} fail ·{" "}
               {report.counts.unknown ?? 0} unknown ·{" "}
@@ -180,16 +258,9 @@ export function ValidationPanel({
               Export CSV
             </a>
             <button onClick={() => onReport(null)}>Model rows</button>
-          </>
+          </div>
         )}
-      </div>
-      {book && schedule && (
-        <p className="muted" role="status">
-          {issue ??
-            `Ready: ${schedule.sheet}, header row ${schedule.header_row}.`}
-          {headers.length > 0 && ` Available headers: ${headers.join(", ")}`}
-        </p>
-      )}
+      </section>
       {error && (
         <p className="error" role="alert">
           {error}

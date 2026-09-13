@@ -79,3 +79,23 @@ Checked locally on 2026-09-13 (macOS ARM64, Docker Desktop).
 - Confirmed the original smoke model, exact IFC bytes, validation results, and CSV remained available through Nginx after container recreation and a backend restart. No volume was removed.
 - No OpenAI key is configured in this deployment. Health reports chat/voice unconfigured, and both routes correctly return `503 openai_not_configured`. Live model calls, microphone capture, speaker playback, and conversational interruption were not retested; historical live results above do not establish the current deployment's credential readiness.
 - The browser still reports three IFC Lite CSG fallbacks across walls `#3862` and `#58037`, plus some unsliced layer warnings. The scene renders, but exact geometry for these openings/layers is not verified. These are retained runtime limitations, not resolved by the Docker deployment.
+
+## General Excel understanding
+
+- Added independent `workbook_id` context to text/voice, so uploads remain readable without material mappings. The UI displays a workbook-linked indicator and updates voice context on workbook replacement.
+- Added deterministic workbook-summary and paginated/searchable worksheet-row tools with revision, row/cell evidence, bounded text payloads, truncation flags, and unevaluated formulas. Workbook cells remain data, never instructions. General workbook inspection does not require GUID columns; material validation still does.
+- Backend: 18 tests passed (3 live tests deselected). New mocked Responses workflow reads a classification workbook without schedule mappings, checks row/cell evidence and pagination/search, and confirms material validation still rejects absent mappings. TypeScript and changed backend lint passed.
+- Docker build/startup and backend readiness passed. Live interpretation of the supplied UniFormat workbook was not run: automatic approval review rejected the planned OpenAI transfer pending explicit workbook-content authorization. Mocked transport coverage uses a synthetic classification workbook.
+- After explicit user approval, the live Astra test passed through deployed `/chat` with the supplied `ASTM-UniFormat.xlsx`, `workbook_id`, and no schedule mapping. Astra called `get_workbook_summary` and read actual rows from Instructions, ASTM 1997, and ASTM 2015. It described the classification reference, cited A1010 / Standard Foundations at ASTM 1997 row 11 and the 2015 MasterFormat/OmniClass columns, and disclosed sampled/truncated coverage. Checked those claims against the returned cell evidence. No material validation was run.
+
+## Workbook and chat presentation
+
+- Replaced the native file-picker row with a styled workbook bar: file name, linked status, Upload Excel/Replace file, and an optional Material check panel. General workbook reading no longer displays validation mapping warnings by default. Worksheet and column settings use the app's existing visual language.
+- Assistant responses (including streamed text and assistant voice transcripts) render Markdown/GFM headings, emphasis, lists, code, links, and scrollable tables. Raw HTML is skipped, unsafe URLs are filtered by the renderer, and remote images are not loaded.
+- 31 frontend tests passed, including Markdown/table rendering and unsafe-content regression checks. TypeScript and Docker production build passed; the deployed empty workbook state was checked visually. Uploaded workbook controls and rendered tables are implemented, but their full browser interaction was not repeated in this UI pass.
+
+## Docker PR synchronization with main
+
+- Pulled the PR branch and fetched `main` at `d07112e` before merging. Preserved the Docker verification record together with the incoming Excel understanding and workbook/chat presentation records. Retained the removal of the reference submodule and corrected the deployment text to describe the mock as archived.
+- Merged frontend: 31 tests passed locally and in the Bun 1.4.2 Docker build; TypeScript and production builds passed. Backend: 18 tests passed, 3 opt-in live tests deselected, and Ruff passed.
+- Rebuilt the merged Compose stack; both services became healthy. The Docker smoke check passed through Nginx with the original IFC bytes, 16 doors, 13 passing / 1 failing / 2 unknown schedule rows, 1 uncovered door, and CSV export. Live AI/voice was not repeated for this merge.

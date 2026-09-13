@@ -1,6 +1,7 @@
 import asyncio
 import json
 import logging
+import time
 import uuid
 from dataclasses import dataclass, field
 from urllib.parse import quote
@@ -39,7 +40,12 @@ class VoiceService:
     """GPT-Live client delegation; the browser never supplies tool results."""
     def __init__(self, settings, agent, http=None, connector=connect):
         self.settings, self.agent = settings, agent
-        self.http = http or httpx.AsyncClient(timeout=45)
+        # Retry only connection establishment (before the POST is sent). Retrying
+        # an ambiguous read failure could create a second upstream session.
+        self.http = http or httpx.AsyncClient(
+            timeout=httpx.Timeout(20, connect=5),
+            transport=httpx.AsyncHTTPTransport(retries=1, limits=httpx.Limits(max_keepalive_connections=0)),
+        )
         self.connector = connector
         self.sessions = {}
 
@@ -49,22 +55,38 @@ class VoiceService:
         if len(self.sessions) >= 4:
             raise AppError(429, "voice_limit", "Close an existing voice session first")
         headers = {"Authorization": f"Bearer {self.settings.api_key}"}
+        started = time.monotonic()
+        stage = "session creation"
         try:
-            response = await self.http.post("https://api.openai.com/v1/live/sessions", headers=headers, json={
-                "session": {"model": self.settings.voice_model, "delegation": {"type": "client"},
-                            "instructions": "You are the voice interface for Astra IFC Compliance. Delegate all model questions, counts, materials, validation and viewer requests to the backend. Speak only verified backend findings. Do not invent results. Be concise. Ask for clarification when context is missing."},
-                "transport": {"type": "webrtc", "sdp": request.sdp},
-            })
-            response.raise_for_status()
-            result = response.json()
-            session_id = result["session"]["id"]
-            socket = await self.connector(
-                f"wss://api.openai.com/v1/live/sessions/{quote(session_id, safe='')}/attach",
-                additional_headers=headers, open_timeout=20, max_size=2**20,
-            )
+            async with asyncio.timeout(28):
+                response = await self.http.post("https://api.openai.com/v1/live/sessions", headers=headers, json={
+                    "session": {"model": self.settings.voice_model, "delegation": {"type": "client"},
+                                "instructions": "You are the voice interface for Astra IFC Compliance. Delegate all model questions, counts, materials, validation and viewer requests to the backend. Speak only verified backend findings. Do not invent results. Be concise. Ask for clarification when context is missing."},
+                    "transport": {"type": "webrtc", "sdp": request.sdp},
+                })
+                response.raise_for_status()
+                result = response.json()
+                session_id = result["session"]["id"]
+                stage = "backend control connection"
+                socket = await self.connector(
+                    f"wss://api.openai.com/v1/live/sessions/{quote(session_id, safe='')}/attach",
+                    additional_headers=headers, open_timeout=8, max_size=2**20,
+                )
         except Exception as exc:
-            logger.warning("Live initialization failed (%s)", type(exc).__name__)
-            raise AppError(502, "voice_unavailable", "GPT-Live session failed; verify API access and connection") from exc
+            # Never log request bodies, SDP, authorization headers or upstream error text.
+            status = exc.response.status_code if isinstance(exc, httpx.HTTPStatusError) else None
+            logger.warning("Live %s failed after %.1fs (%s, status=%s)",
+                           stage, time.monotonic() - started, type(exc).__name__, status)
+            if isinstance(exc, (TimeoutError, httpx.TimeoutException)):
+                raise AppError(504, "voice_timeout", f"GPT-Live {stage} timed out. Please retry.") from exc
+            if isinstance(exc, httpx.TransportError):
+                raise AppError(502, "voice_connection", f"Connection to OpenAI failed during {stage}. Please retry; if it persists, check the backend internet connection.") from exc
+            if status in (401, 403, 404):
+                raise AppError(502, "voice_access", "OpenAI rejected GPT-Live access. Check the backend API key and gpt-live-1 model access.") from exc
+            if status == 429:
+                raise AppError(503, "voice_rate_limit", "OpenAI voice capacity or quota is unavailable. Please retry shortly or check API usage limits.") from exc
+            raise AppError(502, "voice_unavailable", f"GPT-Live {stage} failed. Please retry; backend logs contain the failure stage.") from exc
+        logger.info("Live session and control connection ready in %.1fs", time.monotonic() - started)
         context = TaskContext.model_validate(request.model_dump(exclude={"sdp"}))
         state = VoiceSession(session_id, context, socket)
         self.sessions[session_id] = state

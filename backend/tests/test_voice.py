@@ -3,6 +3,7 @@ import json
 from types import SimpleNamespace
 
 import httpx
+
 from app.schemas import TaskContext, VoiceRequest
 from app.voice import VoiceService, VoiceSession
 
@@ -134,3 +135,53 @@ async def test_live_http_negotiation_and_authenticated_attachment():
         await service.shutdown()
     assert socket.closed
     assert socket.sent[-1]["type"] == "session.close"
+
+
+async def test_connection_failures_are_actionable_and_do_not_register_sessions():
+    import pytest
+
+    from app.config import AppError
+
+    for failure, code, status in [
+        (httpx.RemoteProtocolError("sensitive upstream detail"), "voice_connection", 502),
+        (httpx.ReadTimeout("sensitive upstream detail"), "voice_timeout", 504),
+        (httpx.Response(403, text="sensitive upstream detail"), "voice_access", 502),
+        (httpx.Response(429), "voice_rate_limit", 503),
+    ]:
+        def respond(request, failure=failure):
+            if isinstance(failure, Exception):
+                raise failure
+            return failure
+
+        service = VoiceService(SimpleNamespace(api_key="test-only", voice_model="gpt-live-1"),
+                               VoiceAgent(), http=httpx.AsyncClient(transport=httpx.MockTransport(respond)))
+        try:
+            with pytest.raises(AppError) as caught:
+                await service.create(VoiceRequest(model_id="model", model_revision="rev", sdp="v=0 offer"))
+            assert caught.value.code == code
+            assert caught.value.status == status
+            assert "sensitive" not in caught.value.message
+            assert not service.sessions
+        finally:
+            await service.shutdown()
+
+
+async def test_attachment_timeout_identifies_control_stage():
+    import pytest
+
+    from app.config import AppError
+
+    async def attach(*args, **kwargs):
+        raise TimeoutError()
+
+    service = VoiceService(SimpleNamespace(api_key="test-only", voice_model="gpt-live-1"), VoiceAgent(),
+                           http=httpx.AsyncClient(transport=httpx.MockTransport(lambda _: httpx.Response(201, json={
+                               "session": {"id": "live_mock"}, "transport": {"sdp": "answer"}}))), connector=attach)
+    try:
+        with pytest.raises(AppError) as caught:
+            await service.create(VoiceRequest(model_id="model", model_revision="rev", sdp="offer"))
+        assert caught.value.code == "voice_timeout"
+        assert "backend control connection" in caught.value.message
+        assert not service.sessions
+    finally:
+        await service.shutdown()

@@ -120,9 +120,13 @@ export function ChatPanel({
     }
   }
   async function toggleVoice() {
-    if (live) {
-      await voice.current?.stop().catch((e) => setError(String(e)));
+    if (live || connecting) {
+      const client = voice.current;
+      voice.current = undefined;
       setLive(false);
+      setConnecting(false);
+      setProgress("");
+      await client?.stop();
       return;
     }
     if (!context || connecting) return;
@@ -131,8 +135,13 @@ export function ChatPanel({
     setConnecting(true);
     setError("");
     try {
-      await client.start({ ...context, history: messages.slice(-40) }, event);
-      if (!mounted.current) {
+      await client.start(
+        { ...context, history: messages.slice(-40) },
+        (name, data) => {
+          if (voice.current === client) event(name, data);
+        },
+      );
+      if (!mounted.current || voice.current !== client) {
         await client.stop();
         return;
       }
@@ -141,11 +150,14 @@ export function ChatPanel({
           ...current.current,
           history: messages.slice(-40),
         });
-      setLive(true);
+      if (voice.current === client && mounted.current) setLive(true);
     } catch (e) {
-      if (mounted.current) setError(e instanceof Error ? e.message : String(e));
+      if (mounted.current && voice.current === client) {
+        setError(e instanceof Error ? e.message : String(e));
+        setProgress("");
+      }
     } finally {
-      if (mounted.current) setConnecting(false);
+      if (mounted.current && voice.current === client) setConnecting(false);
     }
   }
   return (
@@ -214,7 +226,9 @@ export function ChatPanel({
             <p>{m.content}</p>
           </div>
         ))}
-        {(busy || live) && progress && <p className="muted">{progress}</p>}
+        {(busy || live || connecting) && progress && (
+          <p className="muted">{progress}</p>
+        )}
         <div ref={end} />
       </div>
       <div className="chat-bottom">
@@ -260,11 +274,11 @@ export function ChatPanel({
         <button
           className={`voice ${live ? "active" : ""}`}
           onClick={() => void toggleVoice()}
-          disabled={!context || busy || connecting}
+          disabled={!context || busy}
         >
           {live ? <Square size={16} /> : <Mic size={16} />}{" "}
           {connecting
-            ? "Connecting…"
+            ? "Cancel voice connection"
             : live
               ? "End voice conversation"
               : "Start voice conversation"}

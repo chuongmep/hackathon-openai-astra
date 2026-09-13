@@ -187,8 +187,13 @@ export async function createViewer(
 
   let destroyed = false;
   let frameId = 0;
+  let previousFrame = performance.now();
   const loop = () => {
     if (destroyed) return;
+    const now = performance.now();
+    if (renderer.getCamera().update((now - previousFrame) / 1000))
+      renderer.requestRender();
+    previousFrame = now;
     renderer.render({
       ...options.current,
       selectedId: selection.current,

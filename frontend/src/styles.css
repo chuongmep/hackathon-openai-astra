@@ -1634,3 +1634,24 @@ dd {
 .view-cube { touch-action:none; user-select:none; cursor:grab; }
 .view-cube:active,.view-cube button:active { cursor:grabbing; }
 .view-cube button { cursor:grab; }
+/* Camera-linked view cube: model axes, shaded faces, edge and corner targets. */
+.navigation-cube { position:absolute; top:58px; left:10px; width:160px; height:155px; z-index:3; }
+.navigation-cube > svg { width:160px; height:150px; touch-action:none; user-select:none; cursor:grab; overflow:visible; }
+.navigation-cube > svg:active { cursor:grabbing; }
+.cube-home { position:absolute; top:0; left:3px; z-index:1; width:27px; height:27px; padding:3px; border:0; background:transparent; color:#68766e; }
+.navigation-face polygon { stroke:#939f98; stroke-width:1.2; stroke-linejoin:round; }
+.navigation-face text { font-family:inherit; font-weight:650; font-size:11px; fill:#47574e; pointer-events:none; }
+.navigation-face:hover polygon,.navigation-face:focus polygon { fill:#c1e3f5; stroke:#438aba; }
+.navigation-face:focus { outline:none; }
+.cube-edge-target { fill:none; stroke:transparent; stroke-width:7; cursor:pointer; }
+.cube-edge-target:hover { stroke:#65b7e5; }
+.cube-corner-target { fill:transparent; cursor:pointer; }
+.cube-corner-target:hover { fill:#65b7e5; stroke:#3887b4; }
+.compass-point circle { fill:transparent; }
+.compass-point text { fill:#66746c; font-size:12px; font-weight:650; }
+.compass-point:hover circle,.compass-point:focus circle { fill:#d7e9df; }
+.cube-menu { position:absolute; right:1px; bottom:4px; width:24px; height:24px; display:grid; place-items:center; color:#65766b; }
+.cube-menu select { position:absolute; inset:0; opacity:0; width:100%; cursor:pointer; }
+.cube-menu:focus-within { outline:2px solid #147d73; border-radius:4px; }
+.cube-unavailable { opacity:.4; pointer-events:none; }
+.scene-legend { top:218px; }

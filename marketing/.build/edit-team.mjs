@@ -1,0 +1,17 @@
+import fs from 'node:fs/promises';
+import {PresentationFile,FileBlob} from '@oai/artifact-tool';
+import {finalizePresentation} from '/Users/me/.codex/plugins/cache/openai-primary-runtime/presentations/26.909.12148/skills/presentations/container_tools/artifact_tool_utils.mjs';
+const root='/Users/me/Downloads/repos/hackathon-openai-astra/marketing';
+const p=await PresentationFile.importPptx(await FileBlob.load(root+'/output/Astra-IFC-Complience.pptx'));
+const s=p.slides.items[0];
+const subtitle=s.shapes.items.find(x=>x.text.toString().includes('AI-assisted model review'));
+subtitle.position={left:43.65,top:485,width:725.51,height:80};
+subtitle.text.style={typeface:'Arial',fontSize:26,color:'#FFFFFF',autoFit:'none'};
+const team=s.shapes.add({geometry:'textbox',position:{left:43.65,top:591,width:745,height:105},fill:'none',line:{fill:'none',width:0}});
+team.text='Chuong Ho  ·  Chuongpvn@gmail.com\nWonseok  ·  wonseoklee.dev@gmail.com';
+team.text.style={typeface:'Arial',fontSize:24,color:'#FFFFFF',autoFit:'none'};
+await (await PresentationFile.exportPptx(p)).save(root+'/.build/team-candidate.pptx');
+const skill='/Users/me/.codex/plugins/cache/openai-primary-runtime/presentations/26.909.12148/skills/presentations';
+await finalizePresentation({workspaceDir:root,candidatePath:root+'/.build/team-candidate.pptx',finalPath:root+'/output/Astra-IFC-Complience-Team.pptx',pythonExecutable:'/Users/me/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3',integrityValidatorPath:skill+'/container_tools/inspect_presentation_package_integrity.py',layoutValidatorPath:skill+'/container_tools/inspect_presentation_layout_geometry.py',layoutArgs:['--expected-slide-size-emu','12192000,6858000','--validate-heading-fit'],verifyArtifactToolImport:true,receiptPath:root+'/.build/team-validation.json'});
+const final=await PresentationFile.importPptx(await FileBlob.load(root+'/output/Astra-IFC-Complience-Team.pptx'));
+for(let i=0;i<final.slides.items.length;i++)await fs.writeFile(root+`/.build/team-${i+1}.png`,new Uint8Array(await (await final.slides.items[i].export({format:'png',scale:1})).arrayBuffer()));

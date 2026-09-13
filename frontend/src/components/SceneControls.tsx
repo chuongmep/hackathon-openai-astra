@@ -1,6 +1,6 @@
-import { useRef, useSyncExternalStore } from "react";
+import { ViewCube } from "./ViewCube";
+import { useSyncExternalStore } from "react";
 import {
-  Box,
   Footprints,
   Orbit,
   Hand,
@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 import { ReviewController, type SceneOptions } from "../lib/review";
 export type { SceneOptions };
-type View = "top" | "front" | "right" | "back" | "left" | "bottom";
 export function SceneControls({
   controller: c,
   loaded,
@@ -25,7 +24,6 @@ export function SceneControls({
   controller: ReviewController;
   loaded: boolean;
 }) {
-  const cubeDrag = useRef({ x: 0, y: 0, moved: false });
   const state = useSyncExternalStore(c.subscribe, c.snapshot);
   const renderer = c.renderer,
     selected = state.selected,
@@ -42,9 +40,6 @@ export function SceneControls({
       c.update({ error: String(e), open: true });
     }
   }
-  function preset(view: View) {
-    c.presetView(view);
-  }
   return (
     <>
       {state.mode === "walk" && (
@@ -54,99 +49,7 @@ export function SceneControls({
           <button onClick={() => c.update({ mode: "orbit" })}>Exit</button>
         </div>
       )}
-      <div className="orientation-control" aria-label="View orientation">
-        <div
-          className="view-cube"
-          title="Click a face to align · drag to orbit"
-          onPointerDown={(e) => {
-            if (!loaded || e.button !== 0) return;
-            cubeDrag.current = { x: e.clientX, y: e.clientY, moved: false };
-          }}
-          onPointerMove={(e) => {
-            if (!loaded || !(e.buttons & 1)) return;
-            const d = cubeDrag.current;
-            const dx = e.clientX - d.x,
-              dy = e.clientY - d.y;
-            if (!d.moved && Math.hypot(dx, dy) < 4) return;
-            if (!d.moved) {
-              c.update({ mode: "orbit" });
-              renderer?.getCamera().reset();
-              renderer?.getCamera().setInteractionMode("orbit");
-              e.currentTarget.setPointerCapture(e.pointerId);
-              d.moved = true;
-            }
-            renderer?.getCamera().orbit(dx, dy);
-            renderer?.requestRender();
-            d.x = e.clientX;
-            d.y = e.clientY;
-          }}
-          onClickCapture={(e) => {
-            if (cubeDrag.current.moved) {
-              e.preventDefault();
-              e.stopPropagation();
-              cubeDrag.current.moved = false;
-            }
-          }}
-        >
-          <button
-            className="cube-top"
-            disabled={!loaded}
-            onClick={() => preset("top")}
-            title="Top view"
-            aria-label="Top view"
-          >
-            TOP
-          </button>
-          <button
-            className="cube-front"
-            disabled={!loaded}
-            onClick={() => preset("front")}
-            title="Front view"
-            aria-label="Front view"
-          >
-            FRONT
-          </button>
-          <button
-            className="cube-right"
-            disabled={!loaded}
-            onClick={() => preset("right")}
-            title="Right view"
-            aria-label="Right view"
-          >
-            RIGHT
-          </button>
-        </div>
-        <div className="orientation-actions">
-          <button
-            disabled={!loaded}
-            title="Orbit / isometric view"
-            aria-label="Orbit view"
-            onClick={() => c.orbitView()}
-          >
-            <Box size={15} />
-          </button>
-          <select
-            aria-label="Choose view direction"
-            defaultValue=""
-            disabled={!loaded}
-            onChange={(e) => {
-              if (e.target.value) preset(e.target.value as View);
-              e.target.value = "";
-            }}
-          >
-            <option value="" disabled>
-              Views
-            </option>
-            {(
-              ["top", "front", "right", "back", "left", "bottom"] as View[]
-            ).map((v) => (
-              <option key={v} value={v}>
-                {v[0].toUpperCase() + v.slice(1)}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+      <ViewCube controller={c} loaded={loaded} />
       {state.colors.length > 0 && (
         <div className="scene-legend" aria-label="Color legend">
           {state.colors.map((g) => (

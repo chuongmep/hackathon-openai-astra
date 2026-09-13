@@ -7,13 +7,23 @@ Read-only IFC model questions and door-material schedule checks, with a local 3D
 Requirements: Docker Desktop, Git, and a WebGPU-capable browser. OpenAI access is only needed for chat/voice.
 
 ```sh
-git submodule update --init --recursive
 cp .env.example .env
 # Set OPENAI_API_KEY in .env to enable AI features.
-docker compose up --build -d
+docker compose up --build -d --wait --wait-timeout 180
+docker compose ps
 ```
 
 Open [the workbench](http://localhost:3000) and [interactive API docs](http://localhost:3000/api/docs). Only the frontend is published, bound to localhost. IFC files and reports persist in the `astra-data` Docker volume. `docker compose down` preserves that volume.
+
+Verify both services through Nginx using Docker only:
+
+```sh
+docker compose --profile test run --build --rm --no-deps smoke
+```
+
+The smoke check verifies the frontend bundle, sample IFC, browser isolation headers, API proxy, uploads, original IFC bytes, door queries, schedule validation, and CSV export. It creates fresh demo records and makes no paid AI calls. When credentials are absent it also checks the chat/voice configuration errors. The test service runs only when explicitly requested.
+
+Use `docker compose logs --tail=100 backend frontend` for diagnostics and `docker compose down` to stop. Re-run the build/start command above after code changes. The default deployment needs no submodule build or locally installed Bun/Python; the legacy mock instructions below use the submodule separately. See [deployment and test instructions](docs/deployment.md).
 
 If your key is in `backend/.env`, load that file explicitly: `docker compose --env-file backend/.env up -d`. After changing the key, rerun that command to recreate the backend with the updated environment. Plain Compose commands read the root `.env` by default.
 

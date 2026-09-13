@@ -22,5 +22,18 @@ services:
       backend:
         condition: service_healthy
     restart: unless-stopped
+  smoke:
+    profiles: [test]
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    entrypoint: ["/app/.venv/bin/python", "/app/scripts/smoke_demo.py"]
+    command: ["--url", "http://frontend", "--assets-dir", "/assets"]
+    volumes:
+      - ./assets:/assets:ro
+    depends_on:
+      frontend:
+        condition: service_healthy
+    restart: "no"
 volumes:
   astra-data:

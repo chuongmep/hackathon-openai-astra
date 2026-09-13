@@ -1,10 +1,10 @@
-# Astra-IFC-Complience
+# Forma
 
 A hackathon project for reviewing construction model data in a 3D workspace, built for modeling and cost estimation teams.
 
 Explore IFC building models, inspect individual objects, and record findings with their visual context. The project aims to extend this workflow with Astra-powered conversation, standards mapping, and compliance review.
 
-The current application uses **Forma** as its interface name. **Astra-IFC-Complience** is the hackathon project name.
+The current application uses **Forma** as its interface name. **Forma** is the hackathon project name.
 
 ## Demo preview
 

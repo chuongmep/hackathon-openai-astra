@@ -2,6 +2,8 @@
 
 Read-only IFC model questions and door-material schedule checks, with a local 3D viewer, Astra chat, and GPT-Live voice integration.
 
+![Preview](./assets/exec-ab17a45f-5d3d-4ccf-84e3-904c6208a7b3.png)
+
 ## Run locally with Docker
 
 Requirements: Docker Desktop, Git, and a WebGPU-capable browser. OpenAI access is only needed for chat/voice.

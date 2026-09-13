@@ -148,7 +148,7 @@ def main():
     (out/'timeline.json').write_text(json.dumps(manifest,indent=2))
     # Fixed generated filenames avoid concat escaping issues.
     (out/'concat.txt').write_text('\n'.join(f"file '{i:02}-{scene['id']}.mp4'" for i,(scene,_,_) in enumerate(prepared)))
-    final=out/'Astra-IFC-Complience-demo.mp4'
+    final=out/'Forma-demo.mp4'
     run(['ffmpeg','-hide_banner','-loglevel','error','-y','-f','concat','-safe','0','-i',out/'concat.txt','-c','copy','-movflags','+faststart',final])
     actual=duration(final)
     if actual>120: raise RuntimeError(f'Output exceeds 120 seconds: {actual}')

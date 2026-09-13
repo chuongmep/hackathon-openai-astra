@@ -1,15 +1,15 @@
 {
-  "project": "Astra-IFC-Complience",
+  "project": "Forma",
   "voice": "Daniel",
   "rate": 175,
   "scenes": [
-    {"id":"intro", "eyebrow":"MODEL INTELLIGENCE / BUILT FOR CLARITY", "title":"Your model.\nUnderstood.", "detail":"From complex geometry to confident decisions.", "narration":"Your model holds thousands of details. Turn them into decisions. Meet Astra I F C Compliance. A clearer way for modeling and cost estimation teams to inspect, understand, and verify building data."},
+    {"id":"intro", "eyebrow":"MODEL INTELLIGENCE / BUILT FOR CLARITY", "title":"Your model.\nUnderstood.", "detail":"From complex geometry to confident decisions.", "narration":"Your model holds thousands of details. Turn them into decisions. Meet Forma. A clearer way for modeling and cost estimation teams to inspect, understand, and verify building data."},
     {"id":"explore", "eyebrow":"01 / EXPLORE", "title":"See the whole picture.\nInspect every detail.", "detail":"Import IFC  /  Navigate  /  Inspect properties", "narration":"Start with your I F C model. Explore the building, select an object, and inspect its properties. Bring geometry and information together in one visual workspace."},
     {"id":"isolate", "eyebrow":"02 / FOCUS", "title":"Find what matters.\nBring it into focus.", "detail":"Zoom in. Zoom out. Isolate the selected object.", "narration":"Zoom in on what matters. Isolate a selected element. Check its data without losing the context of the building. Make every review easier to follow."},
     {"id":"mapping", "eyebrow":"03 / AI MAPPING VISION", "title":"Connect objects\nto your standards.", "detail":"AI-assisted suggestions. Human-reviewed decisions.", "narration":"Our vision takes that workflow further. Use A I to suggest standard mappings, ask questions about objects, and review the proposed data before accepting a change."},
     {"id":"conversation", "eyebrow":"04 / CONVERSATIONAL REVIEW VISION", "title":"Ask your model.\nUnderstand the answer.", "detail":"Model context + visual understanding", "narration":"Imagine asking: which objects need a closer compliance review? Connect the conversation to the current model, inspect the evidence, and keep your team in control of the decision."},
     {"id":"verify", "eyebrow":"05 / TEAM WORKFLOW", "title":"Review visually.\nShare with confidence.", "detail":"Inspect data  /  Capture issues  /  Export spreadsheets", "narration":"For modeling and cost estimation teams, clearer data means a stronger starting point. Inspect properties, capture review issues, and export a spreadsheet for the next stage of your workflow."},
     {"id":"astra", "eyebrow":"ASTRA / HACKATHON VISION", "title":"Visual context.\nAgent-driven action.", "detail":"GPT-Live-1  /  Visual Understanding  /  Agents API", "narration":"Built around an Astra vision: G P T Live One, visual understanding, and the Agents A P I. Connecting what you see, what you ask, and what you do next."},
-    {"id":"outro", "eyebrow":"ASTRA-IFC-COMPLIENCE", "title":"See clearly.\nBuild confidently.", "detail":"Explore the model. Review the data. Move forward.", "narration":"Astra I F C Compliance. See clearly. Review together. Build confidently."}
+    {"id":"outro", "eyebrow":"FORMA", "title":"See clearly.\nBuild confidently.", "detail":"Explore the model. Review the data. Move forward.", "narration":"Forma. See clearly. Review together. Build confidently."}
   ]
 }

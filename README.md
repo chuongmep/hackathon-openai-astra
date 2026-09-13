@@ -19,6 +19,14 @@ If your key is in `backend/.env`, load that file explicitly: `docker compose --e
 
 The default frontend image builds the teammate’s `frontend/` workspace with Bun and its locked IFC Lite parser/geometry/renderer packages. `frontend-mock/` remains the earlier standalone integration reference; its embedded viewer is built with pnpm/Turbo. The `ifc-lite` submodule is pinned to `176f0c06e7190a194efa267ebacf0d81ee69e178` (`@ifc-lite/wasm@7.0.0`), matching the published WASM runtime. Do not replace it with a newer checkout while retaining the old WASM binary.
 
+## Demo materials
+
+- [Forma PowerPoint project demo](assets/Forma-Project-Demo.pptx): 11 slides covering the problem, team use cases, visual classification example, demo workflow, and illustrative time and cost savings.
+- [Sample IFC model](assets/racbasicsampleproject.ifc).
+- [ASTM UniFormat reference workbook](assets/ASTM-UniFormat.xlsx).
+- [Marketing video source and rendering instructions](marketing/README.md). The film illustrates the product vision rather than recording the live application.
+
+
 ## Demo
 
 1. Load `assets/racbasicsampleproject.ifc` (IFC2X3, 16 doors).
@@ -120,5 +128,25 @@ by the running app. See [the frontend guide](frontend/README.md) for controls an
 
 ![Frontend workspace](assets/frontend-demo.png)
 
-The remote presentation is available at
-[Astra IFC comparison](assets/Astra-IFC-Complience-Comparison.pptx).
+## Team
+
+| Member | Email |
+| --- | --- |
+| Chuong Ho | [chuongpqvn@gmail.com](mailto:chuongpqvn@gmail.com) |
+| Wonseok | [wonseoklee.dev@gmail.com](mailto:wonseoklee.dev@gmail.com) |
+
+## Acknowledgments
+
+The frontend uses IFC Lite and ExcelJS. Its design review workflow draws inspiration from Autodesk's AI-aided design demo. See the [frontend guide](frontend/README.md) and retained source notices for attribution.
+
+## Community and project support
+
+Connect with [OpenAI Developers](https://luma.com/fdzbrq5b?tk=TXkf6G).
+
+Explore and support these projects. Visit their official pages for contribution, sponsorship, or donation options where available:
+
+- **IfcOpenShell:** [GitHub repository](https://github.com/ifcopenshell/ifcopenshell) · [Official website](https://ifcopenshell.org/)
+- **uv:** [Documentation](https://docs.astral.sh/uv/)
+- **IFC Lite:** [GitHub repository](https://github.com/LTplus-AG/ifc-lite)
+- **Impeccable:** [Official website](https://impeccable.style/)
+- **Remotion:** [Official website](https://www.remotion.dev/)

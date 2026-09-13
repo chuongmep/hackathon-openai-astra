@@ -1,4 +1,4 @@
-# Astra-IFC-Complience marketing video
+# Forma marketing video
 
 An editable, offline English product film, capped at **120 seconds**. The renderer creates a 1280×720 H.264/AAC MP4 at 24 fps with animated architectural geometry, workflow cards, burned-in English captions, a separate SRT, and a normalized English voiceover.
 
@@ -15,7 +15,7 @@ pip install -r requirements.txt
 python render.py
 ```
 
-Result: `output/Astra-IFC-Complience-demo.mp4`.
+Result: `output/Forma-demo.mp4`.
 
 `storyboard.json` controls the exact project name, narration, headlines, scene content, voice, and speaking rate. The default Daniel voice is an installed British English system voice with a direct, confident delivery at 175 words/minute. No API key, paid service, or network connection is required for rendering after dependencies are installed. Audio quality depends on the installed system voice. For a professional performance, record or generate the same narration with an energetic, authoritative English delivery: clear diction, purposeful pauses, restrained excitement, and emphasis on “see clearly” and “build confidently.”
 
@@ -34,11 +34,11 @@ Scene duration is measured from narration plus a short pause. Rendering stops wi
 
 Dark architectural canvas, mint selection accents, rotating illustrative building blocks, large editorial headlines, short workflow sequences, and a concise closing message. There is no background music, leaving the voice clear.
 
-This is an **illustrative marketing demo**, not a screen recording. Geometry, object data, mapping suggestions, and conversation cards are representative graphics. Actual frontend capabilities were checked against the local source: IFC loading, navigation, properties, isolate, review issues, spreadsheet export, and registered model tools. Existing chat replies are mocked. GPT-Live-1, visual understanding, AI mapping, and Agents API are presented as the requested **Astra integration vision**, not verified live integrations or award wins. The video does not promise automatic certification or cost calculation. It preserves the requested spelling `Astra-IFC-Complience`.
+This is an **illustrative marketing demo**, not a screen recording. Geometry, object data, mapping suggestions, and conversation cards are representative graphics. Actual frontend capabilities were checked against the local source: IFC loading, navigation, properties, isolate, review issues, spreadsheet export, and registered model tools. Existing chat replies are mocked. GPT-Live-1, visual understanding, AI mapping, and Agents API are presented as the requested **Astra integration vision**, not verified live integrations or award wins. The video does not promise automatic certification or cost calculation. It preserves the requested spelling `Forma`.
 
 ## Outputs and validation
 
-- `Astra-IFC-Complience-demo.mp4`: complete shareable film.
+- `Forma-demo.mp4`: complete shareable film.
 - `captions.srt`: sidecar English captions (also burned into the video).
 - `timeline.json`: measured scene starts and durations.
 - `preview-*.jpg`: review frames from each scene.
@@ -47,6 +47,6 @@ This is an **illustrative marketing demo**, not a screen recording. Geometry, ob
 All generated outputs are ignored by Git. Source files are isolated in `marketing`; the frontend is unchanged.
 
 ```sh
-ffprobe -v error -show_entries format=duration:stream=codec_name,width,height,r_frame_rate -of json output/Astra-IFC-Complience-demo.mp4
-ffmpeg -v error -i output/Astra-IFC-Complience-demo.mp4 -f null -
+ffprobe -v error -show_entries format=duration:stream=codec_name,width,height,r_frame_rate -of json output/Forma-demo.mp4
+ffmpeg -v error -i output/Forma-demo.mp4 -f null -
 ```
